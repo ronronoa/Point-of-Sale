@@ -74,21 +74,7 @@ export default function ReceiptView({ receipt, change = 0, open, onClose }) {
           </div>
         </div>
 
-        <div className="flex gap-3 pt-4">
-          <button
-            className="px-4 py-2 border rounded shadow flex-1"
-            onClick={handlePrint}
-          >
-            Print
-          </button>
-
-          <button
-            className="px-4 py-2 border rounded shadow flex-1"
-            onClick={onClose}
-          >
-            Done
-          </button>
-        </div>
+        
       </DialogContent>
     </Dialog>
   );
