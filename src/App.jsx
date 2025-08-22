@@ -8,21 +8,39 @@ import Products from "./pages/Products"
 import Reports from "./pages/Reports"
 import NotFound from "./pages/NotFound"
 import { Toaster } from "@/components/ui/sonner"
+import Login from "./pages/Login"
+import ProtectedRoute from "./components/protectedRoute"
+import AddUser from "./pages/AddUser"
 
 function App() {
   return (
     <>
       <AuthProvider>
         <Router>
-          <Layout>
             <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/pos" element={<POS />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={
+                <ProtectedRoute role="admin">
+                  <Layout>
+                    <Dashboard />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/pos" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <POS />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/add-user" element={
+                <AddUser />
+              }/>
               <Route path="/products" element={<Products />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </Layout>
           <Toaster />
         </Router>
       </AuthProvider>
