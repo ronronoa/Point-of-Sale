@@ -2,9 +2,16 @@ import React from 'react'
 import { Sun, Moon, Menu, User } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import { useAuth } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router';
 
 export default function Header({ onToggleSidebar }) {
-    const { user, toggleRole} = useAuth()
+    const { user, logout} = useAuth()
+    const navigate = useNavigate()
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login')
+    }
   return (
     <header className="h-12 border-b px-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -31,11 +38,17 @@ export default function Header({ onToggleSidebar }) {
                 </div>
                 <span className="text-sm font-medium hidden md:block">{user.name}</span>
 
-                <button 
-                className="px-4 py-1 text-xs text-white font-semibold border rounded-full cursor-pointer bg-black"
-                onClick={toggleRole}
+                <div 
+                className="px-4 py-1 text-xs text-white font-semibold border rounded-full bg-black"
                 >
                     {user.role}
+                </div>
+
+                <button 
+                className="px-4 py-1 text-xs text-white font-semibold border rounded-full bg-red-500 cursor-pointer"
+                onClick={handleLogout}
+                >
+                    Logout
                 </button>
 
                 <div className='hidden md:block'>
