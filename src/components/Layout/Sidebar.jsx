@@ -11,7 +11,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { NavLink, useLocation } from "react-router";
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: LayoutDashboard, roles: ["admin"] },
+  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard, roles: ["admin"] },
   {
     name: "POS",
     href: "/pos",

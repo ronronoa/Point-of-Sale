@@ -1,12 +1,19 @@
 import React from 'react'
-import { Navigate } from 'react-router'
+import { Navigate, useLocation } from 'react-router'
+import { useAuth } from '../contexts/AuthContext';
 
 export default function ProtectedRoute({children, role}) {
-    const token = localStorage.getItem("token")
-    const userRole = localStorage.getItem("role")
+    const { isAuthenticated, user } = useAuth()
+    const location = useLocation();
 
-    if(!token) return <Navigate to="/login" />
-    if (role && role !== userRole) return <Navigate to="/unauthorized" />
+    if(!isAuthenticated) {
+        return <Navigate to="/login" state={{from: location}} replace />
+    }
+
+    if (role && user?.role !== role) {
+        const redirectPath = user?.role === 'admin' ? '/dashboard' : '/pos'
+        return <Navigate to={redirectPath} replace />
+    }
   
     return children;
 }
