@@ -9,7 +9,7 @@ import Reports from "./pages/Reports"
 import NotFound from "./pages/NotFound"
 import { Toaster } from "@/components/ui/sonner"
 import Login from "./pages/Login"
-import ProtectedRoute from "./components/protectedRoute"
+import ProtectedRoute from "./components/ProtectedRoute"
 import AddUser from "./pages/AddUser"
 
 function App() {
@@ -19,11 +19,11 @@ function App() {
         <Router>
             <Routes>
               <Route path="/login" element={<Login />} />
-              <Route path="/" element={
+              <Route path="/dashboard" element={
                 <ProtectedRoute role="admin">
-                  <Layout>
-                    <Dashboard />
-                  </Layout>
+                <Layout>
+                  <Dashboard />
+                </Layout>
                 </ProtectedRoute>
               } />
               <Route path="/pos" element={
