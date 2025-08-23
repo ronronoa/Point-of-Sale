@@ -1,7 +1,7 @@
 import Header from "./components/Layout/Header"
 import Layout from "./components/Layout/Layout"
 import { AuthProvider } from "./contexts/AuthContext"
-import { BrowserRouter as Router, Routes, Route } from "react-router"
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router"
 import Dashboard from "./pages/Dashboard"
 import POS from "./pages/POS"
 import Products from "./pages/Products"
@@ -18,6 +18,7 @@ function App() {
       <AuthProvider>
         <Router>
             <Routes>
+              <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={
                 <ProtectedRoute role="admin">
