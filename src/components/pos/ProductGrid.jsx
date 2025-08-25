@@ -1,7 +1,7 @@
 import { PhilippinePeso, Plus, Search } from "lucide-react";
 import React, { useState } from "react";
-import { mockCategories, mockProducts } from "../../data/mockData";
-import { useDispatch } from "react-redux";
+import { mockCategories } from "../../data/mockData";
+import { useDispatch, useSelector } from "react-redux";
 import { Card, CardContent } from "@/components/ui/card";
 import { Toaster, toast } from "react-hot-toast";
 import { addToCart } from "@/store/cartSlice";
@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from "motion/react";
 
 export default function ProductGrid() {
   const [categories] = useState(mockCategories);
-  const [products] = useState(mockProducts);
+  const products = useSelector(state => state.products.products);
   const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = useState();
   const [searchTerm, setSearchTerm] = useState("");

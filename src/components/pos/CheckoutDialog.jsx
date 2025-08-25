@@ -32,6 +32,7 @@ export default function CheckoutDialog({ open, onOpenChange, onComplete }) {
   const [amountPaid, setAmountPaid] = useState("");
   const [receipt, setReceipt] = useState(null);
   const [showReceipt, setShowReceipt] = useState(false);
+  const products = useSelector((state) => state.products.products)
 
   const change = paymentType === 'cash' ? Math.max(0, (parseFloat(amountPaid) || 0) - total) : 0;
 
@@ -74,7 +75,7 @@ export default function CheckoutDialog({ open, onOpenChange, onComplete }) {
     }
 
     items.forEach(item => {
-      dispatch(updateStock({productId: item.id, quantity: item.quantity}))
+      dispatch(updateStock({productId: item.id, quantity: item.qty}))
     })
 
     const newReceipt = {
