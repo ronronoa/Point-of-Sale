@@ -138,7 +138,7 @@ export default function ProductGrid() {
                     className={`px-2 py-1 border rounded-full
                                     ${
                                       product.stock > 10
-                                        ? "bg-[#0F172A] dark:bg-[#e5e5e5] text-white dark:text-black"
+                                        ? "bg-[#0F172A] text-white white"
                                         : "bg-red-700 text-white"
                                     }`}
                   >

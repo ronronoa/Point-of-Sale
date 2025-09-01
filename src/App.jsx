@@ -36,10 +36,26 @@ function App() {
               } />
 
               <Route path="/add-user" element={
-                <AddUser />
+                <ProtectedRoute role="admin">
+                  <Layout>
+                    <AddUser />
+                  </Layout>
+                </ProtectedRoute>
               }/>
-              <Route path="/products" element={<Products />} />
-              <Route path="/reports" element={<Reports />} />
+              <Route path="/products" element={
+                <ProtectedRoute role="admin">
+                  <Layout>
+                    <Products />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/reports" element={
+                <ProtectedRoute role='admin'>
+                  <Layout>
+                    <Reports />
+                  </Layout>
+                </ProtectedRoute>
+              } />
               <Route path="*" element={<NotFound />} />
             </Routes>
           <Toaster />

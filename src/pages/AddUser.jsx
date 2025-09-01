@@ -1,8 +1,34 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import axios from "axios";
+import { User } from "lucide-react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
+
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function AddUser() {
-  const [form, setForm] = useState({ username: "", password: "", role: "cashier" });
+  const [form, setForm] = useState({
+    username: "",
+    first_name: "",
+    last_name: "",
+    address: "",
+    password: "",
+    role: "cashier",
+  });
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
@@ -10,56 +36,104 @@ export default function AddUser() {
     setMessage("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", form);
-      setMessage(res.data.message);
-      setForm({ username: "", password: "", role: "cashier" });
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        form
+      );
+      // setMessage(res.data.message);
+      toast.success(res.data.message)
+      setForm({ username: "", first_name: "", last_name: "", address: "", password: "", role: "cashier" });
     } catch (err) {
-      setMessage(err.response?.data?.message || "Error adding user");
+      toast.error(err.response?.data?.message || "Error adding user")
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 shadow-lg rounded-lg w-96"
-      >
-        <h2 className="text-xl font-bold mb-4 text-center">Add New User</h2>
+    <div className="flex justify-center items-center min-h-screen">
+      <Toaster position="top-center"/>
+      <div className="w-full max-w-md space-y-8 p-6 text-center">
+        <div className="h-12 w-12 mx-auto rounded-lg bg-primary flex items-center justify-center mb-4">
+          <User className="h-6 w-6 text-primary-foreground" />
+        </div>
+        <h1 className="text-xl md:text-3xl font-bold mb-4">New user</h1>
+        
+        <p className="text-muted-foreground">Add new user</p>
 
-        {message && <p className="text-center text-red-500 mb-3">{message}</p>}
+        <Card>
+          <CardHeader>
+            <CardTitle>MRN</CardTitle>
+            <CardDescription>
+              Register new user to access the system.
+            </CardDescription>
+          </CardHeader>
 
-        <input
-          type="text"
-          placeholder="Username"
-          className="w-full border p-2 mb-3 rounded"
-          value={form.username}
-          onChange={(e) => setForm({ ...form, username: e.target.value })}
-        />
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Label> Username</Label>
+              <Input
+                type="text"
+                required
+                value={form.username}
+                onChange={(e) => setForm({ ...form, username: e.target.value })}
+              />
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full border p-2 mb-3 rounded"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-        />
+              <Label> First Name </Label>
+              <Input
+                type="text"
+                required
+                value={form.first_name}
+                onChange={(e) => setForm({ ...form, first_name: e.target.value })}
+              />
 
-        <select
-          className="w-full border p-2 mb-4 rounded"
-          value={form.role}
-          onChange={(e) => setForm({ ...form, role: e.target.value })}
-        >
-          <option value="admin">Admin</option>
-          <option value="cashier">Cashier</option>
-        </select>
+              <Label> Last Name </Label>
+              <Input
+                type="text"
+                required
+                value={form.last_name}
+                onChange={(e) => setForm({ ...form, last_name: e.target.value })}
+              />
 
-        <button
-          type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded"
-        >
-          Add User
-        </button>
-      </form>
+              <Label> Address </Label>
+              <Input
+                type="text"
+                required
+                value={form.address}
+                onChange={(e) => setForm({ ...form, address: e.target.value })}
+              />
+
+              <Label> Password </Label>
+              <Input
+                type="password"
+                required
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+              />
+
+              <Select
+                value={form.role}
+                onValueChange={(value) =>
+                  setForm((prev) => ({ ...prev, role: value }))
+                }
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Admin</SelectItem>
+                  <SelectItem value="cashier">Cashier</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <button
+                type="submit"
+                className="px-4 py-2 rounded border w-full bg-primary text-muted cursor-pointer mt-2"
+              >
+                Add User
+              </button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

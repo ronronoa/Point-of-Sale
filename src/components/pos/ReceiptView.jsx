@@ -10,11 +10,17 @@ export default function ReceiptView({ receipt, change = 0, open, onClose }) {
   const handlePrint = useReactToPrint({
     content: () => receiptRef.current,
     documentTitle: `Receipt-${receipt.id}`,
+    onAfterPrint: () => {
+      console.log("Print Success!")
+    },
+    onPrintError: (errorLocation, error) => {
+      console.error('Print error', error)
+    }
   });
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-sm">
-        <div className="space-y-4 font-mono text-sm" ref={receiptRef}>
+        <div ref={receiptRef} className="space-y-4 font-mono text-sm">
           <div className="text-center space-y-1">
             <h2 className="font-bold text-lg">MRN POS</h2>
             <p className="text-muted-foreground">123 Chrysanthemum</p>

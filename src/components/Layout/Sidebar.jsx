@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   Package,
   ShoppingCart,
+  User,
 } from "lucide-react";
 import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
@@ -20,6 +21,7 @@ const navigation = [
   },
   { name: "Products", href: "/products", icon: Package, roles: ["admin"] },
   { name: "Reports", href: "/reports", icon: BarChart3, roles: ["admin"] },
+  { name: "User", href: "/add-user", icon: User, roles: ["admin"]}
 ];
 
 export default function Sidebar({ collapsed, onCollapsedChange }) {
