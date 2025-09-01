@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Navigate, useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
+import ThemeToggle from "../components/Layout/ThemeToggle";
 
 export default function Login() {
   // const [form, setForm] = useState({username: "", password: ""})
@@ -60,7 +61,11 @@ export default function Login() {
     }
   };
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <>
+    <div className="flex items-center justify-center min-h-screen relative">
+      <nav className="absolute top-0 right-0 p-4">
+      <ThemeToggle />
+      </nav>
       <div className="w-full max-w-md space-y-8 p-6 text-center">
         <div className="mx-auto h-12 w-12 rounded-lg bg-primary flex items-center justify-center mb-4">
           <Store className="h-6 w-6 text-primary-foreground" />
@@ -130,5 +135,6 @@ export default function Login() {
         </Card>
       </div>
     </div>
+    </>
   );
 }
