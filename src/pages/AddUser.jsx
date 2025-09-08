@@ -126,7 +126,7 @@ export default function AddUser() {
 
               <button
                 type="submit"
-                className="px-4 py-2 rounded border w-full bg-primary text-muted cursor-pointer mt-2"
+                className="px-4 py-2 rounded border w-full bg-[#032f30] text-muted cursor-pointer mt-2"
               >
                 Add User
               </button>
