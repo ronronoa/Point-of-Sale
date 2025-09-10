@@ -22,25 +22,8 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  // const usernamePattern = "^[a-zA-Z0-9]{3,16}+$"
-  // const validationForm = () => {
-  //     if(!form.username.match(usernamePattern)){
-  //         setError("Username should have minimum of 3 characters and maximum of 16 characters A-Z, 0-9")
-  //         return false;
-  //     }
-
-  //     if(!form.username.trim() || !form.password.trim()){
-  //         setError("Username and password are required")
-  //         return false
-  //     }
-
-  //     setError("")
-  //     return true;
-  // }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if(!validationForm()) return
     setError("");
     setLoading(true);
 
@@ -84,25 +67,11 @@ export default function Login() {
 
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* <label htmlFor="username" className='relative'>
-                            <input 
-                            type="text" 
-                            className='px-4 py-2 border text-sm outline-none 
-                                    border-gray-400 rounded hover:border-gray-600 duration-200 peer 
-                                    focus:ring focus:ring-gray-500 bg-inherit'/>
-                            <span className="absolute top-0 left-0 px-1 text-sm text-muted-foreground 
-                                            pointer-events-none peer-focus:text-indigo-500 duration-200 
-                                            peer-focus:text-sm peer-focus:-translate-y-5 bg-white ml-2"
-                            >
-                                Username
-                            </span>
-                       </label> */}
-
               <Label> Username </Label>
               <Input
                 id="username"
                 type="text"
-                required
+                
                 placeholder="Enter your username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -112,7 +81,7 @@ export default function Login() {
               <Input
                 id="password"
                 type="password"
-                required
+                
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

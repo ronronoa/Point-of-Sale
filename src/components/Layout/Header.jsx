@@ -110,13 +110,6 @@ export default function Header({ onToggleSidebar }) {
           <div className="px-4 py-1 text-xs text-white font-semibold border rounded-full bg-[#171717]">
             {user.role}
           </div>
-
-          {/* <button 
-                className="px-4 py-1 text-xs text-white font-semibold border rounded-full bg-red-500 cursor-pointer"
-                onClick={handleLogout}
-                >
-                    Logout
-                </button> */}
           <Tooltip>
             <TooltipTrigger>
               <button onClick={handleLogout} className="cursor-pointer">

@@ -40,7 +40,6 @@ export default function AddUser() {
         "http://localhost:5000/api/auth/register",
         form
       );
-      // setMessage(res.data.message);
       toast.success(res.data.message)
       setForm({ username: "", first_name: "", last_name: "", address: "", password: "", role: "cashier" });
     } catch (err) {
