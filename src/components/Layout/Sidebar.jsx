@@ -41,7 +41,7 @@ export default function Sidebar({ collapsed, onCollapsedChange }) {
       <div className="p-4 border-b flex items-center justify-between">
         {/* {!collapsed && <h1 className="text-lg font-semibold">ROPOS</h1>} */}
 
-        {!collapsed && <img src="/public/RonixLogo.png" alt="Logo" className="w-10 h-10"/>}
+        {/* {!collapsed && <img src="/public/RonixLogo.png" alt="Logo" className="w-10 h-10"/>} */}
 
         <button
           className="p-2 hover:bg-gray-100 dark:hover:bg-[#1e1e1e] transiton duration-200 rounded cursor-pointer"

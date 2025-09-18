@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Menu, User, LogOut } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { useAuth } from "../../contexts/AuthContext";
@@ -32,6 +32,7 @@ export default function Header({ onToggleSidebar }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [profileModal, setProfileModal] = useState(false)
 
   const handleLogout = () => {
     logout();
@@ -100,8 +101,25 @@ export default function Header({ onToggleSidebar }) {
 
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full border flex items-center justify-center bg-[#171717]">
+          <div 
+          className="w-8 h-8 rounded-full border flex items-center justify-center bg-[#171717] relative cursor-pointer" 
+          onClick={() => setProfileModal(!profileModal)}
+          >
             <User size={18} className="text-white" />
+
+            {profileModal && (
+              <div className="border absolute top-10 right-0 p-2 flex items-center justify-center flex-col space-y-2 z-50 dark:bg-white/10 bg-black/10 backdrop-blur-md rounded">
+              <button className="px-4 py-2 border rounded flex gap-1 text-white bg-[#032f30]">
+                <User size={20}/> <span>Profile</span>
+              </button>
+
+              <button onClick={handleLogout} className="cursor-pointer">
+                <div className="border px-4 py-2 rounded bg-red-500 flex items-center justify-center gap-1">
+                  <LogOut size={16} className="text-white" /> <span className="text-white">Logout</span>
+                </div>
+              </button>
+              </div>
+            )}
           </div>
           <span className="text-sm font-medium hidden md:block">
             {user.name}
@@ -110,18 +128,6 @@ export default function Header({ onToggleSidebar }) {
           <div className="px-4 py-1 text-xs text-white font-semibold border rounded-full bg-[#171717]">
             {user.role}
           </div>
-          <Tooltip>
-            <TooltipTrigger>
-              <button onClick={handleLogout} className="cursor-pointer">
-                <div className="border py-1 px-4 rounded-full bg-red-500">
-                  <LogOut size={16} className="text-white" />
-                </div>
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Logout</p>
-            </TooltipContent>
-          </Tooltip>
 
           <div className="hidden md:block">
             <ThemeToggle />

@@ -1,12 +1,68 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Point of Sale (POS) System
 
-Currently, two official plugins are available:
+This project is a modern Point of Sale (POS) system built with React and Vite. It provides a complete solution for managing sales, products, users, and reporting in a retail environment.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- User authentication and role-based access
+- Product catalog and inventory management
+- Cart and checkout process
+- Sales receipt generation
+- Dashboard with sales and product analytics
+- User management (add, edit, remove users)
+- Reports and statistics
+- Responsive and user-friendly interface
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech Stack
+
+- React
+- Vite
+- Tailwind CSS
+- Node.js (backend)
+- Express.js (backend)
+- MongoDB (database)
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+
+### Installation
+1. Clone the repository:
+	```sh
+	git clone <repo-url>
+	cd POS
+	```
+2. Install dependencies:
+	```sh
+	npm install
+	```
+3. Start the development server:
+	```sh
+	npm run dev
+	```
+4. (Optional) Start the backend server:
+	```sh
+	cd backend
+	npm install
+	npm start
+	```
+
+## Folder Structure
+
+- `src/` - Frontend source code (components, pages, context, store)
+- `backend/` - Backend server code (Express, MongoDB)
+- `public/` - Static assets and images
+
+## Usage
+
+1. Log in with your credentials.
+2. Browse products and add them to the cart.
+3. Proceed to checkout and complete the sale.
+4. View receipts, sales analytics, and manage products/users from the dashboard.
+
+## License
+
+This project is licensed under the MIT License.

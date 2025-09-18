@@ -34,8 +34,6 @@ export default function CheckoutDialog({ open, onOpenChange, onComplete }) {
   const [showReceipt, setShowReceipt] = useState(false);
   const products = useSelector((state) => state.products.products)
 
-  const change = paymentType === 'cash' ? Math.max(0, (parseFloat(amountPaid) || 0) - total) : 0;
-
   const handleCheckout = () => {
     const paid = parseFloat(amountPaid) || 0;
 
@@ -104,7 +102,7 @@ export default function CheckoutDialog({ open, onOpenChange, onComplete }) {
     onComplete()
   }
 
-
+  const change = paymentType === 'cash' ? Math.max(0, (parseFloat(amountPaid) || 0) - total) : 0;
   if (showReceipt && receipt) {
     return (
       <ReceiptView 

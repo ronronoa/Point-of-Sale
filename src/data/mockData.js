@@ -1,6 +1,7 @@
 export const mockCategories = [
     {id: 1, name: 'Beverages', color: '#2662D9'},
-    {id: 2, name: 'Snacks', color: '#2671D9'}
+    {id: 2, name: 'Snacks', color: '#2671D9'},
+    {id: 3, name: 'Desserts', color: '#2671D9'}
 ];
 
 export const mockProducts = [

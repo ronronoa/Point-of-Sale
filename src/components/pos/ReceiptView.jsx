@@ -9,12 +9,12 @@ export default function ReceiptView({ receipt, change = 0, open, onClose }) {
 
   const handlePrint = useReactToPrint({
     content: () => receiptRef.current,
-    documentTitle: `Receipt-${receipt.id}`,
+    documentTitle: `Receipt-${receipt?.id || 'receipt'}`,
     onAfterPrint: () => {
-      console.log("Print Success!")
+      console.log('Print completed');
     },
     onPrintError: (errorLocation, error) => {
-      console.error('Print error', error)
+      console.error('Print error:', error);
     }
   });
   return (
@@ -77,6 +77,31 @@ export default function ReceiptView({ receipt, change = 0, open, onClose }) {
                 <span>Subtotal: </span>
                 <span>{receipt.subtotal.toFixed(2)}</span>
             </div>
+
+            <div className="flex justify-between">
+              <span>Tax: </span>
+              <span>{receipt.tax.toFixed(2)}</span>
+            </div>
+
+            <div className="flex justify-between font-bold text-lg border-t pt-1">
+              <span>Total: </span>
+              <span>{receipt.total.toFixed(2)}</span>
+            </div>
+          </div>
+
+          <Separator />
+
+          <div className="space-y-1">
+            <div className="flex justify-between">
+              <span>Payment: </span>
+              <span className="capitalize">{receipt.paymentType}</span>
+            </div>
+            {receipt.paymentType === 'cash' && change > 0 && (
+              <div className="flex justify-between">
+                <span>Change: </span>
+                <span>{change.toFixed(2)}</span>
+              </div>
+            )}
           </div>
         </div>
 
