@@ -4,3 +4,5 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  TAILWIND_DISABLE_OXIDE = "true"
+  TURBO_DISABLE = "true"
