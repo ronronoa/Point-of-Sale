@@ -2,16 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardContent } from "@/components/ui/card";
 import { PhilippinePeso } from "lucide-react";
-import AddProductDialog from "./products/addProductDialog";
 import AddStockDialog from "./products/AddStockDialog";
-import { removeProduct, setProduct } from "../../store/productSlice";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { setProduct } from "../../store/productSlice";
 import RemoveProduct from "./products/RemoveProduct";
 import axios from "axios";
 export default function ProductView() {
