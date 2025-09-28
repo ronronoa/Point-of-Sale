@@ -111,12 +111,13 @@ export default function ProductGrid() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        {filteredProducts.map((product) => (
+        {filteredProducts.length > 0 ?
+          filteredProducts.map((product) => (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           <Card key={product.id} className="overflow-hidden">
             <div className="flex items-center justify-center border-b border-gray-500">
               <img
-                src={product.images}
+                src={product.image}
                 alt={product.name}
                 className="w-52 h-52 aspect-square"
               />
@@ -156,8 +157,13 @@ export default function ProductGrid() {
               </div>
             </CardContent>
           </Card>
-        ))}
-      </div>
+        </div>
+        ))
+        :
+        <h2 className="text-gray-700 text-center">
+          <p>No Products found.</p>
+        </h2>
+        }
     </div>
   );
 }

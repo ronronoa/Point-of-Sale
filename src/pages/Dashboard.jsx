@@ -37,7 +37,6 @@ export default function Dashboard() {
     totalUsers: 0,
     totalProducts: 0,
     totalRevenue: 0,
-    totalProducts: 0,
   });
 
   useEffect(() => {

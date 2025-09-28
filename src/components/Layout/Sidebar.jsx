@@ -21,7 +21,7 @@ const navigation = [
   },
   { name: "Products", href: "/products", icon: Package, roles: ["admin"] },
   { name: "Reports", href: "/reports", icon: BarChart3, roles: ["admin"] },
-  { name: "User", href: "/add-user", icon: User, roles: ["admin"]}
+  { name: "User", href: "/user", icon: User, roles: ["admin"]}
 ];
 
 export default function Sidebar({ collapsed, onCollapsedChange }) {
@@ -34,7 +34,7 @@ export default function Sidebar({ collapsed, onCollapsedChange }) {
 
   return (
     <div
-      className={`border-r hidden md:flex flex-col transition-all duration-300 ${
+      className={`border hidden md:flex flex-col transition-all duration-300 ml-2 my-1 rounded-md ${
         collapsed ? "w-16" : "w-64"
       }`}
     >

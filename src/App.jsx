@@ -10,7 +10,7 @@ import NotFound from "./pages/NotFound"
 import { Toaster } from "@/components/ui/sonner"
 import Login from "./pages/Login"
 import ProtectedRoute from "./components/ProtectedRoute"
-import AddUser from "./pages/AddUser"
+import User from "./pages/User/User"
 
 function App() {
   return (
@@ -35,13 +35,14 @@ function App() {
                 </ProtectedRoute>
               } />
 
-              <Route path="/add-user" element={
+              <Route path="/user" element={
                 <ProtectedRoute role="admin">
                   <Layout>
-                    <AddUser />
+                    <User />
                   </Layout>
                 </ProtectedRoute>
               }/>
+              
               <Route path="/products" element={
                 <ProtectedRoute role="admin">
                   <Layout>
