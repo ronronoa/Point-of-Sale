@@ -58,9 +58,9 @@ export default function AddStockDialog({ productId }) {
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
             placeholder="Enter quantity"
-            className="w-full border p-2 rounded"
+            className="border w-full p-2 rounded focus:ring-2 focus:outline-none focus:ring-gray-500 transition duration-200"
           />
-          <Button onClick={handleAddStock} className="w-full bg-green-700 text-white">
+          <Button onClick={handleAddStock} className="bg-green-700 w-full text-white">
             Confirm
           </Button>
         </div>

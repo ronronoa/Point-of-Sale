@@ -6,6 +6,7 @@ import AddStockDialog from "./products/AddStockDialog";
 import { setProduct } from "../../store/productSlice";
 import RemoveProduct from "./products/RemoveProduct";
 import axios from "axios";
+import AddProductDialog from "./products/AddProductDialog";
 export default function ProductView() {
   const products = useSelector((state) => state.products.products);
   const [selectedCategory] = useState();

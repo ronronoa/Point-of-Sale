@@ -62,9 +62,9 @@ export default function ReceiptView({ receipt, change = 0, open, onClose }) {
 
                 <div className="flex justify-between text-muted-foreground">
                   <span>
-                    {item.qty} x {item.price.toFixed(2)}
+                    {item.qty} x {item.price}
                   </span>
-                  <span>{(item.qty * item.price).toFixed(2)}</span>
+                  <span>{(item.qty * item.price)}</span>
                 </div>
               </div>
             ))}
@@ -99,7 +99,7 @@ export default function ReceiptView({ receipt, change = 0, open, onClose }) {
             {receipt.paymentType === 'cash' && change > 0 && (
               <div className="flex justify-between">
                 <span>Change: </span>
-                <span>{change.toFixed(2)}</span>
+                <span>{change}</span>
               </div>
             )}
           </div>

@@ -41,7 +41,7 @@ export default function Cart() {
                   <div className="flex items-center gap-3 p-3 border rounded-lg" key={item.id}>
                     <div className="w-12 h-12 bg-muted rounded flex items-center justify-center">
                       {/* <span className="text-xs font-medium">{item.name.slice(0, 2)}</span> */}
-                      <img src={item.images} alt={item.name.slice(0,2)} />
+                      <img src={`http://localhost:5000${item.image}`} alt={item.name.slice(0,2)} />
                     </div>
 
                     <div className="flex-1 min-w-0">
