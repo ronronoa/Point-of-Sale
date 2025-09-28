@@ -1,25 +1,4 @@
 import { useEffect, useState } from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Bar,
-  BarChart,
-} from "recharts";
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
 import axios from "axios";
 import SalesOverviewChart from "../components/charts/SalesOverviewChart";
 import ProductOverviewChart from "../components/charts/ProductOverviewChart";
