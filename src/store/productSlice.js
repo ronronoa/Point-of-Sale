@@ -17,9 +17,17 @@ export const restockProductAsync = createAsyncThunk(
         }
     }
 )
-
-const generateId = () => Date.now().toString();
-// const savedProducts = JSON.parse(localStorage.getItem("products"))
+export const fetchProducts = createAsyncThunk(
+  "products/fetchProducts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axios.get("http://localhost:5000/products")
+      return res.data
+    } catch (error) {
+      return rejectWithValue(error.response?.data || { message: "Failed to fetch products" });
+    }
+  }
+)
 const initialState = {
   products: loadState("products") || [],
 };
@@ -32,10 +40,9 @@ const productSlice = createSlice({
       const { productId, quantity } = action.payload;
       const product = state.products.find((p) => p.id === productId);
       console.log("Updating stock for: ", productId, product);
-
+        saveState("products", state.products)
       if (product && product.stock >= quantity) {
         product.stock -= quantity;
-        localStorage.setItem("products", JSON.stringify(state.products));
       }
     },
 
@@ -65,19 +72,32 @@ const productSlice = createSlice({
     setProduct: (state, action) => {
         state.products = action.payload
     },
+
+    updateProductStock: (state, action) => {
+      const { id, newStock } = action.payload
+      const product = state.products.find((p) => p.id === id)
+      if(product) {
+        product.stock = newStock
+      }
+    }
   },
   extraReducers: (builder) => {
-    builder.addCase(restockProductAsync.fulfilled, (state, action) => {
-        const { id, quantity } = action.payload
-        const product = state.products.find((p) => p.id === id)
-        if(product) {
-            product.stock += quantity
-            saveState("products", state.products)
-        }
+  builder
+    .addCase(restockProductAsync.fulfilled, (state, action) => {
+      const { id, quantity } = action.payload;
+      const product = state.products.find((p) => p.id === id);
+      if (product) {
+        product.stock += quantity;
+        saveState("products", state.products);
+      }
     })
-  }
+    .addCase(fetchProducts.fulfilled, (state, action) => {
+      state.products = action.payload;
+      saveState("products", state.products);
+    });
+}
 });
 
-export const { updateStock, restockProduct, addProduct, removeProduct, setProduct } =
+export const { updateStock, restockProduct, addProduct, removeProduct, setProduct, updateProductStock } =
   productSlice.actions;
 export default productSlice.reducer;

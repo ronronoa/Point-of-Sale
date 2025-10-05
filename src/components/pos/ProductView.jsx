@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardContent } from "@/components/ui/card";
-import { PhilippinePeso } from "lucide-react";
+import { PhilippinePeso, Search } from "lucide-react";
 import AddStockDialog from "./products/AddStockDialog";
 import { setProduct } from "../../store/productSlice";
 import RemoveProduct from "./products/RemoveProduct";
 import axios from "axios";
 import AddProductDialog from "./products/AddProductDialog";
+import Barcode from "react-barcode";
+import { mockCategories } from "../../data/mockData";
 export default function ProductView() {
   const products = useSelector((state) => state.products.products);
-  const [selectedCategory] = useState();
-  const [searchTerm] = useState("");
+  const [categories] = useState(mockCategories);
+  const [selectedCategory, setSelectedCategory] = useState();
+  const [searchTerm, setSearchTerm] = useState("");
   const dispatch = useDispatch();
 
   const filteredProducts = products.filter((product) => {
@@ -24,21 +27,65 @@ export default function ProductView() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/products")
-        dispatch(setProduct(res.data))
+        const res = await axios.get("http://localhost:5000/products");
+        dispatch(setProduct(res.data));
       } catch (error) {
-        console.error("Error fetching products", error)
+        console.error("Error fetching products", error);
       }
-    }
-    fetchProducts()
-  }, [dispatch])
+    };
+    fetchProducts();
+  }, [dispatch]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 overflow-auto">
       <div className="flex items-center justify-between rounded-md p-2 md:p-4 border">
         <h2 className="text-lg md:text-3xl font-bold"> Products </h2>
         <div className="flex items-center justify-center gap-2">
           <AddProductDialog />
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <div className="relative">
+          <Search className="absolute top-2.5 left-3 w-4 h-4 text-gray-700" />
+        </div>
+        <input
+          type="text"
+          className="focus:outline-none focus:ring-2 focus:ring-gray-500 
+                            rounded-lg py-2 pl-10 pr-5 text-sm transition duration-300 border-2 border-gray-300
+                            dark:border-[#2e2e2e]"
+          placeholder="Search products..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        
+        <div className="">
+          <button
+          className={`px-4 py-2 text-sm dark:text-gray-300 border rounded border-gray-300 transition-colors duration-200 cursor-pointer
+                            ${
+                              selectedCategory === ""
+                                ? "text-white bg-[#2f2f2f]"
+                                : ""
+                            }`}
+          onClick={() => setSelectedCategory("")}
+        >
+          All Categories
+        </button>
+        {categories.map((category) => (
+          <button
+            key={category.name}
+            className={`px-4 py-2 text-sm dark:text-gray-300 border rounded border-gray-300 
+                                transition-colors duration-200 cursor-pointer
+                                ${
+                                  selectedCategory === category.name
+                                    ? "text-white bg-[#2f2f2f]"
+                                    : ""
+                                }`}
+            onClick={() => setSelectedCategory(category.name)}
+          >
+            {category.name}
+          </button>
+        ))}
         </div>
       </div>
 
@@ -56,19 +103,35 @@ export default function ProductView() {
 
               <CardContent>
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-sm leading-tight">
-                      {product.name}
-                    </h3>
-                    <div className="px-2 py-1 border rounded-full text-xs text-white bg-[#002f09]">
-                      {product.category}
+                  <div className="flex items-center justify-between flex-col md:flex-row">
+                    <div className="flex gap-2 items-center">
+                      <h3 className="font-medium text-sm leading-tight">
+                        {product.name}
+                      </h3>
+
+                      <div className="px-2 py-1 border rounded-full text-xs text-white bg-[#002f09]">
+                        {product.category}
+                      </div>
+                    </div>
+
+                    <div className="flex">
+                      {product.barcode && (
+                        <div className="flex justify-center">
+                          <Barcode
+                            value={product.barcode}
+                            width={1}
+                            height={15}
+                            displayValue={true}
+                            fontSize={12}
+                            background="#fff"
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="flex items-center">
                     <PhilippinePeso size={18} />
-                    <p className="text-lg font-bold">
-                      {product.price}
-                    </p>
+                    <p className="text-lg font-bold">{product.price}</p>
                   </div>
 
                   <div className="flex flex-col md:flex-row items-center justify-between">
@@ -91,7 +154,10 @@ export default function ProductView() {
                 >
                   - Remove
                 </button> */}
-                <RemoveProduct productId={product.id} productName={product.name}/>               
+                      <RemoveProduct
+                        productId={product.id}
+                        productName={product.name}
+                      />
                     </div>
                   </div>
                 </div>
@@ -100,7 +166,7 @@ export default function ProductView() {
           ))}
         </div>
       ) : (
-        <h2 className="text-gray-600 text-center">No Product</h2>
+        <h2 className="text-gray-600 text-center">No Product Found</h2>
       )}
     </div>
   );

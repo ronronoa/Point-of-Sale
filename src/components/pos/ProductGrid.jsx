@@ -19,7 +19,6 @@ export default function ProductGrid() {
       !selectedCategory || product.category === selectedCategory;
     const term = searchTerm.toLowerCase();
     const matchesSearch = product.name.toLowerCase().includes(term);
-
     return matchesCategory && matchesSearch;
   });
 
@@ -115,7 +114,11 @@ export default function ProductGrid() {
       {filteredProducts.length > 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {filteredProducts.map((product) => (
-            <Card key={product.id} className="overflow-hidden">
+            <Card 
+            key={product.id} 
+            className="overflow-hidden hover:scale-105 transition duration-200 cursor-pointer"
+            onClick={() => handleAddtoCart(product, toast.remove())}
+            >
               <div className="flex items-center justify-center border-b border-gray-500">
                 <img
                   src={`http://localhost:5000${product.image}`}

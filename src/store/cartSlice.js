@@ -2,8 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   items: [],
-  discount: 0,
-  taxRate: 0.08,
+  discount: 0, //
+  discountType: null,
+  taxRate: 0.12,
 };
 
 const cartSlice = createSlice({
@@ -12,18 +13,17 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const { product, qty = 1 } = action.payload;
-      const exisitingItem = state.items.find((item) => item.id === product.id);
+      const existingItem = state.items.find((item) => item.id === product.id);
 
-      if (exisitingItem) {
-        exisitingItem.qty += qty;
-        exisitingItem.subtotal = exisitingItem.qty * exisitingItem.price;
+      if (existingItem) {
+        existingItem.qty += qty;
+        existingItem.subtotal = existingItem.qty * existingItem.price;
       } else {
         state.items.push({
           id: product.id,
           name: product.name,
-          images: product.images,
-          price: product.price,
           image: product.image,
+          price: product.price,
           qty,
           subtotal: product.price * qty,
         });
@@ -32,26 +32,22 @@ const cartSlice = createSlice({
 
     updateQty: (state, action) => {
       const { productId, qty } = action.payload;
+      const item = state.items.find((item) => item.id === productId);
 
-      if (qty <= 0) {
-        state.items.filter((item) => item.id !== productId);
+      if (item && qty > 0) {
+        item.qty = qty;
+        item.subtotal = item.price * qty;
       } else {
-        const item = state.items.find((item) => item.id === productId);
-
-        if (item) {
-          item.qty = qty;
-          item.subtotal = item.price * qty;
-        }
+        state.items = state.items.filter((item) => item.id !== productId);
       }
     },
 
     removeFromCart: (state, action) => {
-      const productId = action.payload;
-      state.items = state.items.filter((item) => item.id !== productId);
+      state.items = state.items.filter((item) => item.id !== action.payload);
     },
 
     clearCart: (state) => {
-        state.items = []
+      state.items = [];
     },
 
     setTaxRate: (state, action) => {
@@ -60,6 +56,20 @@ const cartSlice = createSlice({
 
     applyDiscount: (state, action) => {
       state.discount = action.payload;
+    },
+
+    setDiscountType: (state, action) => {
+      const type = action.payload;
+
+      if (type === "PWD" || type === "SENIOR") {
+        state.discountType = type;
+        state.discount = 20; // percent
+        state.taxRate = 0; // VAT exempt
+      } else {
+        state.discountType = null;
+        state.discount = 0;
+        state.taxRate = 0.12;
+      }
     },
   },
 });
@@ -71,5 +81,7 @@ export const {
   clearCart,
   setTaxRate,
   applyDiscount,
+  setDiscountType,
 } = cartSlice.actions;
+
 export default cartSlice.reducer;

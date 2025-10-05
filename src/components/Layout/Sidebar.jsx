@@ -20,7 +20,6 @@ const navigation = [
     roles: ["admin", "cashier"],
   },
   { name: "Products", href: "/products", icon: Package, roles: ["admin"] },
-  { name: "Reports", href: "/reports", icon: BarChart3, roles: ["admin"] },
   { name: "User", href: "/user", icon: User, roles: ["admin"]}
 ];
 
@@ -38,10 +37,19 @@ export default function Sidebar({ collapsed, onCollapsedChange }) {
         collapsed ? "w-16" : "w-64"
       }`}
     >
-      <div className="p-4 border-b flex items-center justify-between">
+      <div className="p-4 border-b flex items-center justify-between relative">
+        <div className="flex items-center gap-2 overflow-hidden">
+          <img
+            src="/POSIMLOGO.png"
+            alt="POSIM Logo"
+            className={`object-cover transition-all duration-300 ${
+              collapsed ? "w-8 h-8 mx-auto" : "w-64 h-10"
+            }`}
+          />
+        </div>
         {/* {!collapsed && <h1 className="text-lg font-semibold">ROPOS</h1>} */}
 
-        {/* {!collapsed && <img src="/public/RonixLogo.png" alt="Logo" className="w-10 h-10"/>} */}
+        {/* {!collapsed && <img src="/public/POSIMLOGO.png" alt="Logo" className=""/>} */}
 
         <button
           className="p-2 hover:bg-gray-100 dark:hover:bg-[#1e1e1e] transiton duration-200 rounded cursor-pointer"

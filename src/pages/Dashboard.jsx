@@ -36,36 +36,20 @@ export default function Dashboard() {
           icon={<User className="text-blue-500" />}
           text="Total Users"
           value={stats.totalUsers}
-          chartData={[
-            { name: "Mon", value: 2 },
-            { name: "Tue", value: 3 },
-            { name: "Wed", value: 5 },
-            { name: "Thu", value: 1 },
-            { name: "Fri", value: 2 },
-          ]}
+          chartData=''
         />
         <StatCardItem icon={<ShoppingBag />} text="Total Sales" value="1,524" />
         <StatCardItem
           icon={<Box />}
           text="Total Product"
           value={stats.totalProducts}
-          chartData={[
-            { name: "Jan", value: 982},
-            { name: "Feb", value: 1200},
-            { name: "March", value: 1892},
-            { name: "Apr", value: 1652},
-          ]}
+          chartData=''
         />
         <StatCardItem
           icon={<PhilippinePeso />}
           text="Total Revenue"
           value={stats.totalRevenue}
-          chartData={[
-            { name: "Jan", value: 982},
-            { name: "Feb", value: 1200},
-            { name: "March", value: 1892},
-            { name: "Apr", value: 1652},
-          ]}
+          chartData=''
         />
       </StatCard>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 md:gap-3 space-y-4">

@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { mockCategories } from "../../../data/mockData";
 import axios from "axios";
+import Barcode from "react-barcode"
 
 export default function AddProductDialog() {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ export default function AddProductDialog() {
     stock: "",
   });
   const [image, setImage] = useState(null)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -151,6 +153,18 @@ export default function AddProductDialog() {
             />
           </div>
 
+          {formData.barcode && (
+        <div className="flex justify-center my-4">
+          <Barcode
+            value={formData.barcode}
+            width={2}
+            height={80}
+            displayValue={true}
+            background="#fff"
+          />
+        </div>
+      )}
+
           <div className="space-y-2">
             <Label htmlFor="category">Category</Label>
             <Select
@@ -202,7 +216,7 @@ export default function AddProductDialog() {
               accept="image/*"
               onChange={handleImageChange}
               placeholder=""
-              className="px-4 py-1 w-full rounded border transition duration-200"
+              className="px-4 py-1 w-full rounded border transition duration-200 cursor-pointer"
             />
             {formData.image && (
               <img src={formData.image} alt="Preview" className="w-full h-40 object-cover rounded-lg border mt-2"/>

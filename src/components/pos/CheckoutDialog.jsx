@@ -5,6 +5,9 @@ import {
   selectGrandTotal,
   selectSubtotal,
   selectTaxAmount,
+  selectDiscountAmount,
+  selectDiscount,
+  selectDiscountType,
 } from "../../store/selectors";
 import {
   Dialog,
@@ -12,106 +15,107 @@ import {
   DialogTitle,
   DialogHeader,
 } from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator"
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Separator } from "@/components/ui/separator";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PhilippinePeso } from "lucide-react";
 import ReceiptView from "./ReceiptView";
 import { toast } from "react-hot-toast";
 import { AnimatePresence, motion } from "motion/react";
-import { updateStock } from '../../store/productSlice'
+import { updateStock, updateProductStock } from "../../store/productSlice";
 import { clearCart } from "../../store/cartSlice";
+import { setDiscountType } from "../../store/cartSlice";
 
 export default function CheckoutDialog({ open, onOpenChange, onComplete }) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const items = useSelector(selectCartItems);
   const subtotal = useSelector(selectSubtotal);
   const tax = useSelector(selectTaxAmount);
   const total = useSelector(selectGrandTotal);
+  const discount = useSelector(selectDiscount);
+  const discountType = useSelector(selectDiscountType);
   const [paymentType, setPaymentType] = useState("cash");
   const [customerName, setCustomerName] = useState("");
   const [amountPaid, setAmountPaid] = useState("");
   const [receipt, setReceipt] = useState(null);
   const [showReceipt, setShowReceipt] = useState(false);
-  const products = useSelector((state) => state.products.products)
 
-  const handleCheckout = () => {
-    const paid = parseFloat(amountPaid) || 0;
+  const handleCheckout = async () => {
+  const paid = parseFloat(amountPaid) || 0;
 
-    if(paymentType === 'cash' && paid < total){
-      toast.custom((t) => (
-      <AnimatePresence>
-        {t.visible && (
-          <motion.div 
-          className="bg-[#EF4444] px-6 py-4 w-72 rounded-lg shadow-md"
-          initial={{opacity: 0, y: 20}}
-          animate={{opacity: 1, y: 0}}
-          exit={{opacity: 0, y: 20}}
-          transition={{duration: 0.3}}
-          >
-            <div className="flex items-center">
-              <img
-                src="/Product_Image/multiply.png"
-                alt=""
-                className="w-5 h-5 mb-2 mr-2"
-              />
-              <p className="text-white text-md mb-2">
-                Insufficient Amount
-              </p>
-            </div>
-            <p className="text-gray-50 text-sm flex items-center">
-              <PhilippinePeso size={12}/>{`${paid.toFixed(2)} is less than a total (₱${total.toFixed(2)})`}</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    ),
-   // toast duration
-    {
-      duration: 2000,
-    }
-  );
-      return;
+  if (paymentType === "cash" && paid < total) {
+    toast.error("Insufficient Amount");
+    return;
+  }
+
+  try {
+    // ✅ Update each product stock in the database
+    for (const item of items) {
+      const response = await fetch(
+        `http://localhost:5000/products/${item.id}/reduce-stock`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ quantity: item.qty }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to update stock for ${item.name}`);
+      }
     }
 
-    items.forEach(item => {
-      dispatch(updateStock({productId: item.id, quantity: item.qty}))
-    })
+    toast.success("Checkout Successful and stock updated.");
 
+    // ✅ Generate receipt
     const newReceipt = {
       id: `RCP-${Date.now()}`,
       date: new Date(),
       items: [...items],
       subtotal,
       tax,
-      discount: 0,
+      discount,
       total,
       paymentType,
-      customerName: customerName || undefined
-    }
+      customerName: customerName || undefined,
+    };
 
-    setReceipt(newReceipt)
-    setShowReceipt(true)
-    dispatch(clearCart())
+    setReceipt(newReceipt);
+    setShowReceipt(true);
+
+    // dispatch(updateProductStock({ id: item.id, newStock: product.stock - item.qty}))
+
+    // ✅ Clear cart from Redux
+    dispatch(clearCart());
+  } catch (error) {
+    console.error("Checkout error:", error);
+    toast.error("Error updating stock or completing checkout.");
   }
+};
+
 
   const handleReceiptClose = () => {
-    setShowReceipt(false)
-    setReceipt(null)
-    setCustomerName('')
-    setAmountPaid('')
-    setPaymentType('cash')
-    onComplete()
-  }
+    setShowReceipt(false);
+    setReceipt(null);
+    setCustomerName("");
+    setAmountPaid("");
+    setPaymentType("cash");
+    onComplete();
+  };
 
-  const change = paymentType === 'cash' ? Math.max(0, (parseFloat(amountPaid) || 0) - total) : 0;
+  const change =
+    paymentType === "cash"
+      ? Math.max(0, (parseFloat(amountPaid) || 0) - total)
+      : 0;
   if (showReceipt && receipt) {
     return (
-      <ReceiptView 
+      <ReceiptView
         receipt={receipt}
-        change={change}
+        // change={change}
+        amountEntered={amountPaid}
         open={showReceipt}
         onClose={handleReceiptClose}
       />
-    )
+    );
   }
 
   return (
@@ -136,101 +140,115 @@ export default function CheckoutDialog({ open, onOpenChange, onComplete }) {
                   </span>
                 </div>
               ))}
-            <Separator />
-            <div className="flex justify-between">
-              <span>Subtotal:</span>
-              <span className="flex items-center">
-                <PhilippinePeso size={12}/>
-                {subtotal.toFixed(2)}
-              </span>
-            </div>
-
-            <div className="flex justify-between">
-              <span>Tax:</span>
-              <span className="flex items-center">
-                <PhilippinePeso size={12} />
-                {tax.toFixed(2)}
-              </span>
-            </div>
-
-            <div className="flex justify-between">
-              <span>Total:</span>
-              <span className="flex items-center font-semibold">
-                <PhilippinePeso size={12}/>
-                {total.toFixed(2)}
-              </span>
-            </div>
-
-            {/* Customer Info */}
-            <div className="flex flex-col space-y-2">
-              <label className="font-semibold text-xs md:text-sm">Customer Name (Optional)</label>
-              <input 
-              type="text" 
-              id="customer"
-              value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
-              placeholder="Enter customer name"
-              className="px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500 transition duration-200"
-              />
-            </div>
-
-            {/* Payment Type */}
-            <div className="space-y-3">
-              <label className="font-semibold">Payment Method</label>
-              <RadioGroup value={paymentType} onValueChange={setPaymentType}>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="cash" id='cash' />
-                    <label htmlFor="cash">Cash</label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="card" id='card' />
-                  <label htmlFor="card">Card</label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="digital" id='digital' />
-                  <label htmlFor="digital">Digital</label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            {paymentType === 'cash' && (
-              <div className="space-y-2 flex flex-col">
-                <label htmlFor="amount" className="font-semibold">Amount Paid</label>
-                <input 
-                type="number" 
-                placeholder="0.00"
-                id="amount"
-                step="0.01"
-                value={amountPaid}
-                onChange={(e) => setAmountPaid(e.target.value)}
-                className="px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500 transition duration-200"
-                />
-
-                {amountPaid && (
-                  <p className="text-sm text-muted-foreground">
-                    Change: {change.toFixed(2)}
-                  </p>
-                )}
+              <Separator />
+              <div className="flex justify-between">
+                <span>Subtotal:</span>
+                <span className="flex items-center">
+                  <PhilippinePeso size={12} />
+                  {subtotal.toFixed(2)}
+                </span>
               </div>
-            )}
 
-            <div className="flex gap-3">
-              <button 
-              className="px-4 py-2 border rounded-md bg-red-500 text-white font-semibold cursor-pointer flex-1 hover:bg-red-600"
-              onClick={() => onOpenChange(false)}
-              >
-                Cancel
-              </button>
+              <div className="flex justify-between">
+                <span>Discount:</span>
+                <span>{discount.toFixed(2)}</span>
+              </div>
 
-              <button 
-              className="px-4 py-2 border rounded-md bg-[#0F172A] text-white font-semibold cursor-pointer flex-1"
-              onClick={() => handleCheckout(toast.remove())}
-              >
-                Complete Sale
-              </button>
-            </div>
+              <div className="flex justify-between">
+                <span>Tax:</span>
+                <span className="flex items-center">
+                  <PhilippinePeso size={12} />
+                  {tax.toFixed(2)}
+                </span>
+              </div>
+
+              <div className="flex justify-between">
+                <span>Total:</span>
+                <span className="flex items-center font-semibold">
+                  <PhilippinePeso size={12} />
+                  {total.toFixed(2)}
+                </span>
+              </div>
+
+              {/* Customer Info */}
+              <div className="flex flex-col space-y-2">
+                <label className="font-semibold text-xs md:text-sm">
+                  Customer Name (Optional)
+                </label>
+                <input
+                  type="text"
+                  id="customer"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  placeholder="Enter customer name"
+                  className="px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500 transition duration-200"
+                />
+              </div>
+
+              {/* Discount Type */}
+              <div className="space-y-3">
+                <label className="font-semibold">Discount Type</label>
+                <select
+                  value={discountType || ""}
+                  onChange={(e) =>
+                    dispatch(setDiscountType(e.target.value || null))
+                  }
+                  className="px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500 transition duration-200 w-full"
+                >
+                  <option value="">None</option>
+                  <option value="PWD">PWD / Senior Citizen (20% + Tax exempt)</option>
+                </select>
+              </div>
+
+              {/* Payment Type */}
+              <div className="space-y-3">
+                <label className="font-semibold">Payment Method</label>
+                <RadioGroup value={paymentType} onValueChange={setPaymentType}>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="cash" id="cash" />
+                    <label htmlFor="cash">Cash</label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {paymentType === "cash" && (
+                <div className="space-y-2 flex flex-col">
+                  <label htmlFor="amount" className="font-semibold">
+                    Amount Paid
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="0.00"
+                    id="amount"
+                    step="0.01"
+                    value={amountPaid}
+                    onChange={(e) => setAmountPaid(e.target.value)}
+                    className="px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500 transition duration-200"
+                  />
+
+                  {amountPaid && (
+                    <p className="text-sm text-muted-foreground">
+                      Change: {change.toFixed(2)}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                <button
+                  className="px-4 py-2 border rounded-md bg-red-500 text-white font-semibold cursor-pointer flex-1 hover:bg-red-600"
+                  onClick={() => onOpenChange(false)}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  className="px-4 py-2 border rounded-md bg-[#0F172A] text-white font-semibold cursor-pointer flex-1"
+                  onClick={() => handleCheckout(toast.remove())}
+                >
+                  Complete Sale
+                </button>
+              </div>
             </div>
           </div>
         </div>

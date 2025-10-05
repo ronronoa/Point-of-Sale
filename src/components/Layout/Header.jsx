@@ -4,11 +4,6 @@ import ThemeToggle from "./ThemeToggle";
 import { useAuth } from "../../contexts/AuthContext";
 import { NavLink, useLocation, useNavigate } from "react-router";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
   Sheet,
   SheetContent,
   SheetTrigger,

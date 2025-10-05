@@ -23,7 +23,7 @@ export default function Cart() {
           <CardHeader classname="pb-4">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">Cart</CardTitle>
-              <Badge>{itemCount} items</Badge>
+              <Badge>{itemCount} items </Badge>
             </div>
           </CardHeader>
 
@@ -99,7 +99,7 @@ export default function Cart() {
                     <span>{subtotal.toLocaleString('en-PH', {style: 'currency', currency: 'PHP'})}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span>Tax (8%) :</span>
+                    <span>Tax (12%) :</span>
                     <span>{taxAmount.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">

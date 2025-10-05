@@ -11,8 +11,15 @@ import { Toaster } from "@/components/ui/sonner"
 import Login from "./pages/Login"
 import ProtectedRoute from "./components/ProtectedRoute"
 import User from "./pages/User/User"
+import { useDispatch } from "react-redux"
+import { useEffect } from "react"
+import { fetchProducts } from "./store/productSlice"
 
 function App() {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [dispatch])
   return (
     <>
       <AuthProvider>
@@ -47,13 +54,6 @@ function App() {
                 <ProtectedRoute role="admin">
                   <Layout>
                     <Products />
-                  </Layout>
-                </ProtectedRoute>
-              } />
-              <Route path="/reports" element={
-                <ProtectedRoute role='admin'>
-                  <Layout>
-                    <Reports />
                   </Layout>
                 </ProtectedRoute>
               } />

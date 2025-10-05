@@ -9,18 +9,40 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
-import { removeProduct } from "../../../store/productSlice";
+import { fetchProducts, removeProduct } from "../../../store/productSlice";
+import toast from "react-hot-toast";
 export default function RemoveProduct({productId, productName}) {
   const dispatch = useDispatch();
-  const handleRemove = () => {
-    dispatch(removeProduct(productId))
+
+  const handleRemove = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/products/${productId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        }
+        
+      )
+      if (!response.ok) {
+        throw new Error(`Failed to remove product: ${productName}`);
+      }
+      dispatch(removeProduct(productId));
+      dispatch(fetchProducts())
+      toast.success(`"${productName}" removed successfully.`);
+
+    } catch (error) {
+      console.error("Remove error:", error);
+      toast.error("Error removing product.");
+    }
   }
   return (
     <Dialog>
       <DialogTrigger asChild>
         <button
           variant="outline"
-          className="px-2 py-1 border rounded text-xs bg-red-700 text-white cursor-pointer hover:bg-gray-100 hover:text-black"
+          className="px-1 md:px-2 py-0.5 md:py-1 border rounded text-xs bg-red-700 text-white cursor-pointer hover:bg-gray-100 hover:text-black"
         >
           - Remove
         </button>
