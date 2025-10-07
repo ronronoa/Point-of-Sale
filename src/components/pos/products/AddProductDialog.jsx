@@ -50,7 +50,7 @@ export default function AddProductDialog() {
       return;
     }
 
-    const productNameRegex = /^[A-Za-z ]+$/;
+    const productNameRegex = /^[A-Za-z -]+$/;
 
     if (!productNameRegex.test(formData.name)) {
       setError("Product name must contain letters only");

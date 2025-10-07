@@ -3,6 +3,7 @@ import { Menu, User, LogOut } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { useAuth } from "../../contexts/AuthContext";
 import { NavLink, useLocation, useNavigate } from "react-router";
+import { Separator } from '@/components/ui/separator'
 import {
   Sheet,
   SheetContent,
@@ -19,8 +20,7 @@ const navigation = [
       roles: ["admin", "cashier"],
     },
     { name: "Products", href: "/products", roles: ["admin"] },
-    { name: "Reports", href: "/reports", roles: ["admin"] },
-    { name: "User", href: "/add-user", roles: ["admin"] },
+    { name: "User", href: "/user", roles: ["admin"] },
   ];
 
 export default function Header({ onToggleSidebar }) {
@@ -50,7 +50,10 @@ export default function Header({ onToggleSidebar }) {
 
           <SheetContent side="left" className="w-52">
             <SheetHeader>
-              <SheetTitle>MRN POS</SheetTitle>
+              <SheetTitle>
+                <img src="/public/POSIMLOGO.png" alt="" className="w-40 h-10 object-cover"/>
+              </SheetTitle>
+              <Separator />
             </SheetHeader>
             <ul className="space-y-2 p-2">
               {filteredNavigation.map((item) => {

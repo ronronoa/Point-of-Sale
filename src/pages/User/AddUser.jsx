@@ -1,6 +1,5 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,7 +10,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Toaster, toast } from "react-hot-toast";
-
 import {
   Dialog,
   DialogContent,
@@ -32,7 +30,6 @@ export default function AddUser() {
     confirm_password: "",
     role: "cashier",
   });
-  const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -40,12 +37,11 @@ export default function AddUser() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("");
     setErrors({});
 
     if (form.password !== form.confirm_password) {
-      toast.error("Password does not match.")
-      return
+      toast.error("Password does not match.");
+      return;
     }
 
     try {
@@ -64,167 +60,204 @@ export default function AddUser() {
         confirm_password: "",
         role: "cashier",
       });
+      setOpen(false);
     } catch (err) {
       if (err.response?.data?.errors) {
         setErrors(err.response.data.errors);
       } else {
-        setMessage(err.response?.data?.message || "Error adding user");
         toast.error(err.response?.data?.message || "Error adding user");
       }
     }
+  };
+
+  const handleInputChange = (field, value) => {
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <Toaster position="top-center" />
       <DialogTrigger asChild>
-        <button className="px-4 py-2 border rounded bg-[#032f30] hover:bg-[#032122] text-white cursor-pointer">
+        <button className="px-4 py-2 border rounded bg-[#032f30] hover:bg-[#032122] text-white cursor-pointer transition-colors duration-200">
           + Add User
         </button>
       </DialogTrigger>
-      <DialogContent>
-        <DialogHeader className="my-2 items-center">
-          <DialogTitle className="text-2xl">Add New User</DialogTitle>
+      
+      <DialogContent className="sm:max-w-[625px] max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="text-center">
+          <DialogTitle className="text-xl font-semibold text-gray-800">
+            Add New User
+          </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label> Username</Label>
-            <Input
-              type="text"
-              required
-              value={form.username}
-              onChange={(e) => setForm({ ...form, username: e.target.value })}
-              className={`${errors.username ? "border-red-500" : ""}`}
-            />
-            {errors.username ? (
-              <p className="text-red-500 text-xs">{errors.username}</p>
-            ) : (
-              <p className="text-gray-400 text-xs">
-                Username must contain letters only.
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label> First Name </Label>
-            <Input
-              type="text"
-              required
-              value={form.first_name}
-              onChange={(e) => setForm({ ...form, first_name: e.target.value })}
-              className={`${errors.first_name ? "border-red-500" : ""}`}
-            />
-            {errors.first_name ? (
-              <p className="text-red-500 text-xs">{errors.first_name}</p>
-            ) : (
-              <p className="text-gray-400 text-xs">
-                First Name must contain letters only.
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label> Last Name </Label>
-            <Input
-              type="text"
-              required
-              value={form.last_name}
-              onChange={(e) => setForm({ ...form, last_name: e.target.value })}
-              className={`${errors.last_name ? "border-red-500" : ""}`}
-            />
-            {errors.last_name ? (
-              <p className="text-red-500 text-xs">{errors.last_name}</p>
-            ) : (
-              <p className="text-gray-400 text-xs">
-                Last Name must contain letters only.
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label> Address </Label>
-            <Input
-              type="text"
-              required
-              value={form.address}
-              onChange={(e) => setForm({ ...form, address: e.target.value })}
-              className={`${errors.address ? "border-red-500" : ""}`}
-            />
-            {errors.address ? (
-              <p className="text-red-500 text-xs">{errors.address}</p>
-            ) : (
-              <p className="text-gray-400 text-xs">
-                Address must contain only letters, numbers, spaces, commas,
-                periods, or dashes.
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-2 relative">
-            <Label> Password </Label>
-            <Input
-              type={showPassword ? "text" : "password"}
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              className={`${errors.password ? "border-red-500" : ""}`}
-            />
-            {errors.password ? (
-              <p className="text-red-500 text-xs">{errors.password}</p>
-            ) : (
-              <p className="text-gray-400 text-xs">
-                Password must be at least 4 characters.
-              </p>
-            )}
-
-            <div className="space-y-2 relative">
-              <Label> Confirm Password </Label>
-              <Input 
-              type={showConfirmPassword ? "text" : "password"}
-              value={form.confirm_password}
-              onChange={(e) => setForm({ ...form, confirm_password: e.target.value})}
-              />
-              <button 
-              type="button" 
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute top-7 right-3 cursor-pointer"
-              >
-                {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18}/>}
-              </button>
+        <form onSubmit={handleSubmit} className="mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="username" className="text-sm font-medium text-gray-700">
+                  Username *
+                </Label>
+                <Input
+                  id="username"
+                  type="text"
+                  required
+                  value={form.username}
+                  onChange={(e) => handleInputChange("username", e.target.value)}
+                  className={`w-full ${errors.username ? "border-red-500 focus:ring-red-500" : "focus:ring-[#032f30]"}`}
+                />
+                {errors.username ? (
+                  <p className="text-red-500 text-xs">{errors.username}</p>
+                ) : (
+                  <p className="text-gray-500 text-xs">
+                    Username must contain letters only
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="first_name" className="text-sm font-medium text-gray-700">
+                  First Name *
+                </Label>
+                <Input
+                  id="first_name"
+                  type="text"
+                  required
+                  value={form.first_name}
+                  onChange={(e) => handleInputChange("first_name", e.target.value)}
+                  className={`w-full ${errors.first_name ? "border-red-500 focus:ring-red-500" : "focus:ring-[#032f30]"}`}
+                />
+                {errors.first_name ? (
+                  <p className="text-red-500 text-xs">{errors.first_name}</p>
+                ) : (
+                  <p className="text-gray-500 text-xs">
+                    First name must contain letters only
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="last_name" className="text-sm font-medium text-gray-700">
+                  Last Name *
+                </Label>
+                <Input
+                  id="last_name"
+                  type="text"
+                  required
+                  value={form.last_name}
+                  onChange={(e) => handleInputChange("last_name", e.target.value)}
+                  className={`w-full ${errors.last_name ? "border-red-500 focus:ring-red-500" : "focus:ring-[#032f30]"}`}
+                />
+                {errors.last_name ? (
+                  <p className="text-red-500 text-xs">{errors.last_name}</p>
+                ) : (
+                  <p className="text-gray-500 text-xs">
+                    Last name must contain letters only
+                  </p>
+                )}
+              </div>
             </div>
 
-            <button 
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute top-7 right-3 cursor-pointer"
-            >
-              {showPassword ? <EyeOff size={20}/> : <Eye size={20}/>}
-            </button>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="address" className="text-sm font-medium text-gray-700">
+                  Address *
+                </Label>
+                <Input
+                  id="address"
+                  type="text"
+                  required
+                  value={form.address}
+                  onChange={(e) => handleInputChange("address", e.target.value)}
+                  className={`w-full ${errors.address ? "border-red-500 focus:ring-red-500" : "focus:ring-[#032f30]"}`}
+                />
+                {errors.address ? (
+                  <p className="text-red-500 text-xs">{errors.address}</p>
+                ) : (
+                  <p className="text-gray-500 text-xs">
+                    Letters, numbers, spaces, commas, periods, or dashes only
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2 relative">
+                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                  Password *
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={form.password}
+                    onChange={(e) => handleInputChange("password", e.target.value)}
+                    className={`w-full pr-10 ${errors.password ? "border-red-500 focus:ring-red-500" : "focus:ring-[#032f30]"}`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+                {errors.password ? (
+                  <p className="text-red-500 text-xs">{errors.password}</p>
+                ) : (
+                  <p className="text-gray-500 text-xs">
+                    Password must be at least 4 characters
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2 relative">
+                <Label htmlFor="confirm_password" className="text-sm font-medium text-gray-700">
+                  Confirm Password *
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="confirm_password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={form.confirm_password}
+                    onChange={(e) => handleInputChange("confirm_password", e.target.value)}
+                    className="w-full pr-10 focus:ring-[#032f30]"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+                  >
+                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="role" className="text-sm font-medium text-gray-700">
+                  Role *
+                </Label>
+                <Select
+                  value={form.role}
+                  onValueChange={(value) => handleInputChange("role", value)}
+                >
+                  <SelectTrigger className="w-full focus:ring-[#032f30]">
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="cashier">Cashier</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
 
-          <Label> Role </Label>
-          <Select
-            value={form.role}
-            onValueChange={(value) =>
-              setForm((prev) => ({ ...prev, role: value }))
-            }
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Role" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="admin">Admin</SelectItem>
-              <SelectItem value="cashier">Cashier</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <button
-            type="submit"
-            className="px-4 py-2 rounded border w-full bg-[#032f30] text-muted cursor-pointer mt-2"
-            onClick={() => toast.remove()}
-          >
-            Add User
-          </button>
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            <button
+              type="submit"
+              className="w-full px-4 py-3 bg-[#032f30] hover:bg-[#032122] text-white font-medium rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#032f30]"
+              onClick={() => toast.remove()}
+            >
+              Add User
+            </button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>
