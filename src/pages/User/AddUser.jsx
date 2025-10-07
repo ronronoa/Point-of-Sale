@@ -43,6 +43,11 @@ export default function AddUser() {
     setMessage("");
     setErrors({});
 
+    if (form.password !== form.confirm_password) {
+      toast.error("Password does not match.")
+      return
+    }
+
     try {
       const res = await axios.post(
         "http://localhost:5000/api/auth/register",
@@ -179,7 +184,6 @@ export default function AddUser() {
               value={form.confirm_password}
               onChange={(e) => setForm({ ...form, confirm_password: e.target.value})}
               />
-
               <button 
               type="button" 
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}

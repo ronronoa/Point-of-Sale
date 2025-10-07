@@ -121,7 +121,6 @@ export default function ProductView() {
                             height={15}
                             displayValue={true}
                             fontSize={12}
-                            background="#fff"
                           />
                         </div>
                       )}

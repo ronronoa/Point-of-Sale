@@ -36,7 +36,11 @@ export default function Dashboard() {
     const fetchChartData = async () => {
       try {
         const salesRate = await axios.get("http://localhost:5000/api/chart/sales")
-        setSalesChartData(salesRate.data)
+        const formattedData = salesRate.data.map(item => ({
+          ...item,
+          name: new Date(item.name).toLocaleDateString('en-CA')
+        }))
+        setSalesChartData(formattedData)
 
         const productRes = await axios.get("http://localhost:5000/api/chart/products")
         setProductChartData(productRes.data)
@@ -76,6 +80,7 @@ export default function Dashboard() {
         icon={<ShoppingBag />} 
         text="Total Sales" 
         value={stats.totalSales} 
+        chartData={salesChartData}
         />
         <StatCardItem
           icon={<Box />}
