@@ -180,7 +180,7 @@ export default function ReceiptView({ receipt, open, onClose , amountEntered = 0
 
           <div className="text-center mt-2">
             <p>Thank you for shopping!</p>
-            <p>Visit again :)</p>
+            <p>Come again :)</p>
           </div>
         </div>
 

@@ -193,7 +193,7 @@ export default function CheckoutDialog({ open, onOpenChange, onComplete }) {
                   onChange={(e) =>
                     dispatch(setDiscountType(e.target.value || null))
                   }
-                  className="px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500 transition duration-200 w-full"
+                  className="px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500 transition duration-200 w-full cursor-pointer"
                 >
                   <option value="">None</option>
                   <option value="PWD">PWD / Senior Citizen (20% + Tax exempt)</option>
