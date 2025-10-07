@@ -14,6 +14,7 @@ import User from "./pages/User/User"
 import { useDispatch } from "react-redux"
 import { useEffect } from "react"
 import { fetchProducts } from "./store/productSlice"
+import AddUser from "./pages/User/AddUser"
 
 function App() {
   const dispatch = useDispatch()
@@ -56,6 +57,10 @@ function App() {
                     <Products />
                   </Layout>
                 </ProtectedRoute>
+              } />
+
+              <Route path="/add-user" element={
+                    <AddUser />
               } />
               <Route path="*" element={<NotFound />} />
             </Routes>

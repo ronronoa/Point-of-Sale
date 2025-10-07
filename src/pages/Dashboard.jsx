@@ -16,7 +16,12 @@ export default function Dashboard() {
     totalUsers: 0,
     totalProducts: 0,
     totalRevenue: 0,
+    totalSales: 0
   });
+
+  const [salesChartData, setSalesChartData] = useState([])
+  const [productChartData, setProductChartData] = useState([])
+  const [userChartData, setUserChartData] = useState([])
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -27,7 +32,36 @@ export default function Dashboard() {
         console.error("Error fetching stats: ", error);
       }
     };
+
+    const fetchChartData = async () => {
+      try {
+        const salesRate = await axios.get("http://localhost:5000/api/chart/sales")
+        setSalesChartData(salesRate.data)
+
+        const productRes = await axios.get("http://localhost:5000/api/chart/products")
+        setProductChartData(productRes.data)
+      } catch (error) {
+        console.error("Error fetching chart data:", error)
+      }
+    }
+
+    const fetchUserData = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/users/chart')
+        const formattedData = res.data.map(item => ({
+          ...item,
+          name: new Date(item.name).toLocaleDateString('en-CA')
+        }))
+
+        setUserChartData(formattedData)
+      } catch (error) {
+         console.error("Error fetching user chart data:", error);
+      }
+    }
+
     fetchStats();
+    fetchUserData();
+    fetchChartData();
   }, []);
   return (
     <>
@@ -36,9 +70,13 @@ export default function Dashboard() {
           icon={<User className="text-blue-500" />}
           text="Total Users"
           value={stats.totalUsers}
-          chartData=''
+          chartData={userChartData}
         />
-        <StatCardItem icon={<ShoppingBag />} text="Total Sales" value="1,524" />
+        <StatCardItem 
+        icon={<ShoppingBag />} 
+        text="Total Sales" 
+        value={stats.totalSales} 
+        />
         <StatCardItem
           icon={<Box />}
           text="Total Product"

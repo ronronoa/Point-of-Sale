@@ -22,20 +22,6 @@ export default function StatCard({ children }) {
   );
 }
 
-// export function StatCardItem({ text, icon, value }) {
-//   return (
-//     <div className="font-bold border dark:border-[#1f1f1f] dark:bg-[#1e1e1e] p-4 rounded-md shadow-md">
-//       <div className="px-4 py-5 sm:p-6">
-//         <span className="flex items-center text-sm font-medium dark:text-gray-300">
-//           <span className="mr-2">{icon}</span>
-//           <span className="">{text}</span>
-//         </span>
-//         <p className="mt-2 text-xl font-bold">{value}</p>
-//       </div>
-//     </div>
-//   );
-// }
-
 export function StatCardItem({ text, icon, value, chartData, color = "#3B82F6" }) {
   return (
     <div className="font-bold border dark:border-[#1f1f1f] dark:bg-[#1e1e1e] bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300">

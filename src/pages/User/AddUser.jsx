@@ -173,7 +173,7 @@ export default function AddUser() {
             )}
 
             <div className="space-y-2 relative">
-              <Label> Password </Label>
+              <Label> Confirm Password </Label>
               <Input 
               type={showConfirmPassword ? "text" : "password"}
               value={form.confirm_password}

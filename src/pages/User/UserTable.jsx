@@ -1,32 +1,73 @@
-import React, { useEffect } from "react";
+import axios from "axios";
+import { Edit, Trash2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 export default function UserTable() {
-  return (
-    <table className="min-w-full divide-y divide-gray-600">
-      <thead>
-        <tr>
-          {[
-            "First Name",
-            "Last Name",
-            "Address",
-            "Date Registered",
-            "Actions",
-          ].map((header) => (
-            <th
-              key={header}
-              className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-400 uppercase tracking-wider hidden md:table-cell"
-            >
-              {header}
-            </th>
-          ))}
+  const [users, setUsers] = useState([]);
 
-          <tbody>
-            <td className="hidden md:table-cell px-6 py-4 text-sm font-medium dark:text-gray-100">
-                
-            </td>
-          </tbody>
-        </tr>
-      </thead>
-    </table>
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/users");
+        setUsers(res.data);
+      } catch (error) {
+        console.error("Error fetching users: ", error);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="min-w-full divide-y divide-gray-600">
+        <thead>
+          <tr>
+            {[
+              "First Name",
+              "Last Name",
+              "Address",
+              "Date Registered",
+              "Actions",
+            ].map((header) => (
+              <th
+                key={header}
+                className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-400 uppercase tracking-wider hidden md:table-cell"
+              >
+                {header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+
+        <tbody className="divide-y divide-gray-700">
+          {users.map((user, index) => (
+            <tr key={index} className="divide-x divide-gray-700">
+              <td className="px-3 md:px-6 py-2 text-xs dark:text-gray-100 hidden md:table-cell">
+                {user.first_name}
+              </td>
+              <td className="px-3 md:px-6 py-2 text-xs dark:text-gray-100 hidden md:table-cell">
+                {user.last_name}
+              </td>
+              <td className="px-3 md:px-6 py-2 text-xs dark:text-gray-100 hidden md:table-cell">
+                {user.address}
+              </td>
+              <td className="px-3 md:px-6 py-2 text-xs dark:text-gray-100 hidden md:table-cell">
+                {new Date(user.date_registered).toLocaleDateString()}
+              </td>
+              <td className="px-3 md:px-6 py-2 text-xs dark:text-gray-100 hidden md:table-cell">
+                <div className="flex items-center justify-center gap-2">
+                  <button className="text-blue-500 hover:scale-105 transition duration-200 cursor-pointer">
+                    <Edit size={20}/>
+                  </button>
+                  <button className="text-red-500 hover:scale-105 transition duration-200 cursor-pointer">
+                    <Trash2 size={20} />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

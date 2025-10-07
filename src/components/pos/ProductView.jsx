@@ -45,7 +45,7 @@ export default function ProductView() {
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-x-2">
         <div className="relative">
           <Search className="absolute top-2.5 left-3 w-4 h-4 text-gray-700" />
         </div>
@@ -59,7 +59,6 @@ export default function ProductView() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         
-        <div className="">
           <button
           className={`px-4 py-2 text-sm dark:text-gray-300 border rounded border-gray-300 transition-colors duration-200 cursor-pointer
                             ${
@@ -86,7 +85,6 @@ export default function ProductView() {
             {category.name}
           </button>
         ))}
-        </div>
       </div>
 
       {filteredProducts.length > 0 ? (

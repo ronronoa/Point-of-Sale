@@ -48,25 +48,22 @@ export default function CheckoutDialog({ open, onOpenChange, onComplete }) {
   }
 
   try {
-    // ✅ Update each product stock in the database
     for (const item of items) {
-      const response = await fetch(
-        `http://localhost:5000/products/${item.id}/reduce-stock`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ quantity: item.qty }),
-        }
-      );
+  const response = await fetch(`http://localhost:5000/products/checkout`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      product_id: item.id,
+      quantity: item.qty,
+    }),
+  });
 
-      if (!response.ok) {
-        throw new Error(`Failed to update stock for ${item.name}`);
-      }
-    }
+  if (!response.ok) {
+    throw new Error(`Checkout failed for ${item.name}`);
+  }
+}
+      toast.success("Checkout successful!")
 
-    toast.success("Checkout Successful and stock updated.");
-
-    // ✅ Generate receipt
     const newReceipt = {
       id: `RCP-${Date.now()}`,
       date: new Date(),
@@ -82,14 +79,54 @@ export default function CheckoutDialog({ open, onOpenChange, onComplete }) {
     setReceipt(newReceipt);
     setShowReceipt(true);
 
-    // dispatch(updateProductStock({ id: item.id, newStock: product.stock - item.qty}))
-
-    // ✅ Clear cart from Redux
     dispatch(clearCart());
   } catch (error) {
     console.error("Checkout error:", error);
-    toast.error("Error updating stock or completing checkout.");
+    toast.error("Error processing checkout.");
   }
+
+  // try {
+  //   for (const item of items) {
+  //     const response = await fetch(
+  //       `http://localhost:5000/products/${item.id}/reduce-stock`,
+  //       {
+  //         method: "PUT",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({ quantity: item.qty }),
+  //       }
+  //     );
+
+  //     if (!response.ok) {
+  //       throw new Error(`Failed to update stock for ${item.name}`);
+  //     }
+  //   }
+
+  //   toast.success("Checkout Successful and stock updated.");
+
+  //   // ✅ Generate receipt
+  //   const newReceipt = {
+  //     id: `RCP-${Date.now()}`,
+  //     date: new Date(),
+  //     items: [...items],
+  //     subtotal,
+  //     tax,
+  //     discount,
+  //     total,
+  //     paymentType,
+  //     customerName: customerName || undefined,
+  //   };
+
+  //   setReceipt(newReceipt);
+  //   setShowReceipt(true);
+
+  //   // dispatch(updateProductStock({ id: item.id, newStock: product.stock - item.qty}))
+
+  //   // ✅ Clear cart from Redux
+  //   dispatch(clearCart());
+  // } catch (error) {
+  //   console.error("Checkout error:", error);
+  //   toast.error("Error updating stock or completing checkout.");
+  // }
 };
 
 
