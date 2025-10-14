@@ -86,7 +86,7 @@ export default function Dashboard() {
           icon={<Box />}
           text="Total Product"
           value={stats.totalProducts}
-          chartData=''
+          chartData={productChartData}
         />
         <StatCardItem
           icon={<PhilippinePeso />}

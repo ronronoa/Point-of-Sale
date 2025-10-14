@@ -1,17 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import axios from "axios";
 
 const COLORS = ["#0a7075", "#0c969c", "#A855F7", "#F472B6", "#F59E0B"];
 
 export default function ProductOverviewChart() {
-  const chartData = [
-    { category: "Beverages", stock: 100 },
-    { category: "Snacks", stock: 100 },
-    { category: "Desserts", stock: 100 },
-    { category: "Breads", stock: 100 },
-  ];
-
+  const [categoryData, setCategoryData] = useState([])
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/chart/categories")
+        setCategoryData(res.data)
+      } catch (error) {
+        console.error("Error Fetching Categories:", error)
+      }
+    }
+    fetchCategories()
+  }, [])
   return (
     <Card>
       <CardHeader>
@@ -26,7 +32,7 @@ export default function ProductOverviewChart() {
               backgroundColor: "#f0f0f0",
             }}/>
             <Pie
-              data={chartData}
+              data={categoryData}
               dataKey="stock"
               nameKey="category"
               cx="50%"
@@ -37,7 +43,7 @@ export default function ProductOverviewChart() {
               }
               fontSize={12}
             >
-              {chartData.map((entry, index) => (
+              {categoryData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}

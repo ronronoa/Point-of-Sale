@@ -117,7 +117,7 @@ export default function ProductGrid() {
             <Card 
             key={product.id} 
             className="overflow-hidden hover:scale-105 transition duration-200 cursor-pointer"
-            onClick={() => handleAddtoCart(product, toast.remove())}
+            // onClick={() => handleAddtoCart(product, toast.remove())}
             >
               <div className="flex items-center justify-center border-b border-gray-500">
                 <img
