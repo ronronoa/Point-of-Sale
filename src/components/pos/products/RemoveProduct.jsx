@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
 import { fetchProducts, removeProduct } from "../../../store/productSlice";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 export default function RemoveProduct({productId, productName}) {
   const dispatch = useDispatch();
 
@@ -39,10 +39,11 @@ export default function RemoveProduct({productId, productName}) {
   }
   return (
     <Dialog>
+      <Toaster />
       <DialogTrigger asChild>
         <button
           variant="outline"
-          className="px-1 md:px-2 py-0.5 md:py-1 border rounded text-xs bg-red-700 text-white cursor-pointer hover:bg-gray-100 hover:text-black"
+          className="px-1 md:px-2 py-0.5 md:py-1 border rounded text-xs bg-red-700 text-white cursor-pointer hover:bg-red-500 hover:text-black transition duration-200"
         >
           - Remove
         </button>

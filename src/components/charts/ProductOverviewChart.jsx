@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import axios from "axios";
 
-const COLORS = ["#0a7075", "#0c969c", "#A855F7", "#F472B6", "#F59E0B"];
+const COLORS = ["#4e79a7", "#f28e2c", "#e15759", "#59a14f", "#edc949"];
 
 export default function ProductOverviewChart() {
   const [categoryData, setCategoryData] = useState([])

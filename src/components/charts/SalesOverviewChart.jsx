@@ -1,7 +1,20 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import {Card, CardHeader, CardTitle, CardContent} from "@/components/ui/card"
-import { CartesianGrid, LineChart, ResponsiveContainer, XAxis, YAxis, Line, Tooltip } from "recharts";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/card";
+import {
+  CartesianGrid,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  Tooltip,
+  BarChart,
+  Bar,
+} from "recharts";
 
 export default function SalesOverviewChart() {
   const [salesData, setSalesData] = useState([]);
@@ -22,29 +35,32 @@ export default function SalesOverviewChart() {
     fetchData();
   }, []);
 
-  const chartData = [
-    { month: "January", beverages: "Coca Cola", sales: "20" },
-    { month: "Febuary", snack: "Piatos", sales: "50" },
-  ];
   return (
-  <Card>
-    <CardHeader>
+    <Card>
+      <CardHeader>
         <CardTitle>Sales Overview</CardTitle>
-        <CardContent>
-            <ResponsiveContainer width="100%" height={400}>
-                <LineChart width={400} height={300} data={salesData}>
-                    <CartesianGrid strokeDasharray="3 3"/>
-                    <XAxis dataKey="date"/>
-                    <YAxis />
-                    <Tooltip contentStyle={{
-                        fontSize: 12,
-                        borderRadius: "5px"
-                    }}/>
-                    <Line type="monotone" dataKey="total" stroke="#92c7b0" strokeWidth={2} dot={{ fill: "#92c7b0", strokeWidth: 2, r: 4}} activeDot={{r:6, strokeWidth: 2}}/>
-                </LineChart>
-            </ResponsiveContainer>
-        </CardContent>
-    </CardHeader>
-  </Card>
-)
+      </CardHeader>
+      <CardContent>
+        <ResponsiveContainer width="100%" height={400}>
+          <BarChart data={salesData} margin={{ top: 20, right: 30, left: 0, bottom: 10 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip
+              contentStyle={{
+                fontSize: 12,
+                borderRadius: "5px",
+              }}
+            />
+            <Bar
+              dataKey="total"
+              fill="#92c7b0"
+              radius={[6, 6, 0, 0]}
+              barSize={60}
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      </CardContent>
+    </Card>
+  );
 }

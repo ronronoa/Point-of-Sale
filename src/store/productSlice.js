@@ -55,6 +55,14 @@ const productSlice = createSlice({
       }
     },
 
+    updateProduct: (state, action) => {
+      const { productId, updatedData } = action.payload;
+      const existingProduct = state.products.find(product => product.id === productId);
+      if (existingProduct) {
+        Object.assign(existingProduct, updatedData);
+      }
+    },
+
     addProduct: (state, action) => {
       const newProduct = action.payload
       state.products.push(newProduct);
@@ -98,6 +106,6 @@ const productSlice = createSlice({
 }
 });
 
-export const { updateStock, restockProduct, addProduct, removeProduct, setProduct, updateProductStock } =
+export const { updateStock, restockProduct, addProduct, removeProduct, setProduct, updateProductStock, updateProduct } =
   productSlice.actions;
 export default productSlice.reducer;

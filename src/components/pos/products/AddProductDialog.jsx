@@ -27,12 +27,14 @@ const MySwal = withReactContent(Swal);
 export default function AddProductDialog() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const today = new Date().toISOString().split('T')[0]
   const [formData, setFormData] = useState({
     name: "",
     barcode: "",
     category: "",
     price: "",
     stock: "",
+    date_added: today,
     image: "/placeholder.svg",
   });
   const [image, setImage] = useState(null);
@@ -47,13 +49,17 @@ export default function AddProductDialog() {
       !formData.barcode ||
       !formData.category ||
       !formData.price ||
-      !formData.stock
+      !formData.stock ||
+      !formData.date_added
     ) {
       MySwal.fire({
         icon: "error",
         title: "Incomplete Form",
         text: "Please fill in all required fields.",
         confirmButtonColor: "#032f30",
+        timer: 1800,
+        showConfirmButton: false,
+        showCloseButton: true
       });
       return;
     }
@@ -71,6 +77,7 @@ export default function AddProductDialog() {
       data.append("category", formData.category);
       data.append("price", formData.price);
       data.append("stock", formData.stock);
+      data.append("date_added", formData.date_added)
 
       if (image) data.append("image", image);
 
@@ -86,6 +93,7 @@ export default function AddProductDialog() {
         confirmButtonColor: "#032f30",
         timer: 1800,
         showConfirmButton: false,
+        showCloseButton: true
       });
 
       dispatch(addProduct(res.data.product));
@@ -97,6 +105,7 @@ export default function AddProductDialog() {
         category: "",
         price: "",
         stock: "",
+        date_added: today,
         image: "/placeholder.svg",
       });
       setImage(null);
@@ -197,6 +206,16 @@ export default function AddProductDialog() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700"> Date </Label>
+                <input 
+                type="date"
+                className="w-full border border-gray-300 p-2 rounded-md focus:ring-2 focus:ring-[#032f30]"
+                value={formData.date_added}
+                onChange={(e) => handleInputChange("date_added", e.target.value)}
+                />
               </div>
             </div>
 

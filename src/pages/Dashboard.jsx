@@ -22,6 +22,7 @@ export default function Dashboard() {
   const [salesChartData, setSalesChartData] = useState([])
   const [productChartData, setProductChartData] = useState([])
   const [userChartData, setUserChartData] = useState([])
+  const [revenueChartData, setRevenueChartData] = useState([])
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -49,6 +50,19 @@ export default function Dashboard() {
       }
     }
 
+    const fetchRevenueChartData = async () => {
+      try {
+        const revenueData = await axios.get("http://localhost:5000/api/chart/revenues")
+        const formattedData = revenueData.data.map(item => ({
+          ...item,
+          name: new Date(item.date).toLocaleDateString('en-CA')
+        }))
+        setRevenueChartData(formattedData)
+      } catch (error) {
+        console.error("Error fetching chart revenue:", error)
+      }
+    }
+
     const fetchUserData = async () => {
       try {
         const res = await axios.get('http://localhost:5000/api/users/chart')
@@ -66,6 +80,7 @@ export default function Dashboard() {
     fetchStats();
     fetchUserData();
     fetchChartData();
+    fetchRevenueChartData();
   }, []);
   return (
     <>
@@ -77,22 +92,22 @@ export default function Dashboard() {
           chartData={userChartData}
         />
         <StatCardItem 
-        icon={<ShoppingBag />} 
+        icon={<ShoppingBag className="text-orange-500"/>} 
         text="Total Sales" 
         value={stats.totalSales} 
         chartData={salesChartData}
         />
         <StatCardItem
-          icon={<Box />}
+          icon={<Box className="text-amber-500"/>}
           text="Total Product"
           value={stats.totalProducts}
           chartData={productChartData}
         />
         <StatCardItem
-          icon={<PhilippinePeso />}
+          icon={<PhilippinePeso className="text-green-500"/>}
           text="Total Revenue"
           value={stats.totalRevenue}
-          chartData=''
+          chartData={revenueChartData}
         />
       </StatCard>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 md:gap-3 space-y-4">
