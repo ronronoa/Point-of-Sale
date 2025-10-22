@@ -1,20 +1,21 @@
 import axios from "axios";
 import { Edit, Trash2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import EditUsers from "../../components/pos/users/EditUsers";
 
 export default function UserTable() {
   const [users, setUsers] = useState([]);
 
+  const fetchUsers = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/users");
+      setUsers(res.data);
+    } catch (error) {
+      console.error("Error fetching users: ", error);
+    }
+  }, []);
+
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/users");
-        setUsers(res.data);
-      } catch (error) {
-        console.error("Error fetching users: ", error);
-      }
-    };
     fetchUsers();
   }, []);
 
@@ -57,7 +58,7 @@ export default function UserTable() {
               </td>
               <td className="px-3 md:px-6 py-2 text-xs dark:text-gray-100 hidden md:table-cell">
                 <div className="flex items-center justify-center gap-2">
-                  <EditUsers />
+                  <EditUsers user={user} onUpdated={fetchUsers} />
                   <button className="text-red-500 hover:scale-105 transition duration-200 cursor-pointer">
                     <Trash2 size={20} />
                   </button>
