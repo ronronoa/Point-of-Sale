@@ -54,7 +54,7 @@ export default function SalesOverviewChart() {
             />
             <Bar
               dataKey="total"
-              fill="#92c7b0"
+              fill="#4C763B"
               radius={[6, 6, 0, 0]}
               barSize={60}
             />

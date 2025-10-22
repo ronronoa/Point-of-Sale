@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Edit, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import EditUsers from "../../components/pos/users/EditUsers";
 
 export default function UserTable() {
   const [users, setUsers] = useState([]);
@@ -31,7 +32,7 @@ export default function UserTable() {
             ].map((header) => (
               <th
                 key={header}
-                className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-400 uppercase tracking-wider hidden md:table-cell"
+                className="px-3 md:px-6 py-2 md:py-3 text-center text-xs font-medium text-gray-700 dark:text-gray-400 uppercase tracking-wider hidden md:table-cell"
               >
                 {header}
               </th>
@@ -56,9 +57,7 @@ export default function UserTable() {
               </td>
               <td className="px-3 md:px-6 py-2 text-xs dark:text-gray-100 hidden md:table-cell">
                 <div className="flex items-center justify-center gap-2">
-                  <button className="text-blue-500 hover:scale-105 transition duration-200 cursor-pointer">
-                    <Edit size={20}/>
-                  </button>
+                  <EditUsers />
                   <button className="text-red-500 hover:scale-105 transition duration-200 cursor-pointer">
                     <Trash2 size={20} />
                   </button>

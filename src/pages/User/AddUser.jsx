@@ -34,7 +34,6 @@ export default function AddUser() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // frontend validation rules
   const validateField = (field, value) => {
     let message = "";
     const nameRegex = /^[A-Za-z ]+$/

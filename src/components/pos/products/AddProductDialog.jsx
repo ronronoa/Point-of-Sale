@@ -21,6 +21,7 @@ import axios from "axios";
 import Barcode from "react-barcode";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import toast from 'react-hot-toast'
 
 const MySwal = withReactContent(Swal);
 
@@ -78,6 +79,13 @@ export default function AddProductDialog() {
       data.append("price", formData.price);
       data.append("stock", formData.stock);
       data.append("date_added", formData.date_added)
+      for (const key in formData) {
+        if(key !== "customCategory") data.append(key, formData[key])
+      }
+
+      if (formData.category === "other" && formData.customCategory) {
+        data.set("category", formData.customCategory)
+      }
 
       if (image) data.append("image", image);
 
@@ -85,8 +93,8 @@ export default function AddProductDialog() {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      // ✅ Success SweetAlert
-      await MySwal.fire({
+      // Success SweetAlert
+        await MySwal.fire({
         icon: "success",
         title: "Product Added!",
         text: res.data.message,
@@ -112,20 +120,42 @@ export default function AddProductDialog() {
       setOpen(false);
     } catch (error) {
       console.error(error);
-      MySwal.fire({
-        icon: "error",
-        title: "Error Adding Product",
-        text: "Something went wrong while saving your product.",
-        confirmButtonColor: "#032f30",
-      });
+      // MySwal.fire({
+      //   icon: "error",
+      //   title: "Error Adding Product",
+      //   text: "Something went wrong while saving your product.",
+      //   showConfirmButton: true,
+      //   showCloseButton: true,
+      //   timer: 1800,
+      //   confirmButtonColor: "#032f30",
+      // });
+      toast.error(error.response?.data?.message)
     }
   };
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field, value, e) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
+
+    const valueDate = e.target.value
+    const selectedDate = new Date(valueDate)
+    const minDate = new Date("2020-01-01")
+    const maxDate = new Date(today)
+
+    if (selectedDate < minDate || selectedDate > maxDate) {
+      setError("Date must be between 2020 and 2025.")
+      setFormData({
+        date_added: ""
+      })
+    } else {
+      setError("")
+      setFormData({
+        date_added: valueDate
+      })
+    }
+
   };
 
   const handleImageChange = (e) => {
@@ -194,7 +224,13 @@ export default function AddProductDialog() {
                 <Label htmlFor="category" className="text-sm font-medium text-gray-700">
                   Category *
                 </Label>
-                <Select onValueChange={(value) => handleInputChange("category", value)}>
+                <Select 
+                value={formData.category}
+                onValueChange={(value) => setFormData((prev) => ({
+                  ...prev,
+                  category: value,
+                  customCategory: value === 'other' ? prev.customCategory : "",
+                }))}>
                   <SelectTrigger className="w-full border border-gray-300 focus:ring-2 focus:ring-[#032f30]">
                     <SelectValue placeholder="Select Category" />
                   </SelectTrigger>
@@ -204,14 +240,35 @@ export default function AddProductDialog() {
                         {category.name}
                       </SelectItem>
                     ))}
+                    <SelectItem value="other">
+                      Other
+                    </SelectItem>
                   </SelectContent>
                 </Select>
+
+                {formData.category === "other" && (
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-gray-700"> Specify Category </Label>
+                    <input
+                    type="text"
+                    value={formData.customCategory || ""}
+                    onChange={(e) => setFormData((prev) => ({
+                      ...prev,
+                      customCategory: e.target.value
+                    }))}
+                    placeholder="Enter custom category"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#032f30]"
+                  />
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-gray-700"> Date </Label>
                 <input 
                 type="date"
+                min="2020-01-01"
+                max={today}
                 className="w-full border border-gray-300 p-2 rounded-md focus:ring-2 focus:ring-[#032f30]"
                 value={formData.date_added}
                 onChange={(e) => handleInputChange("date_added", e.target.value)}
@@ -258,7 +315,7 @@ export default function AddProductDialog() {
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md cursor-pointer file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-medium file:bg-[#032f30] file:text-white hover:file:bg-[#032122] transition"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md cursor-pointer file:cursor-pointer file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-medium file:bg-[#032f30] file:text-white hover:file:bg-[#032122] transition"
                 />
                 <div className="mt-2 border border-gray-300 rounded-md p-2 bg-gray-50">
                   {image ? (

@@ -11,6 +11,13 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const navigation = [
     { name: "Dashboard", href: "/dashboard", roles: ["admin"] },
@@ -28,6 +35,7 @@ export default function Header({ onToggleSidebar }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [profileModal, setProfileModal] = useState(false)
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -106,18 +114,51 @@ export default function Header({ onToggleSidebar }) {
             <User size={18} className="text-white" />
 
             {profileModal && (
-              <div className="border absolute top-10 right-0 p-2 flex items-center justify-center flex-col space-y-2 z-50 dark:bg-white/10 bg-black/10 backdrop-blur-md rounded">
-              <button className="px-4 py-2 border rounded flex gap-1 text-white bg-[#032f30]">
-                <User size={20}/> <span>Profile</span>
-              </button>
+        <div className="border absolute top-10 right-0 p-2 flex flex-col items-center space-y-2 z-50 dark:bg-white/10 bg-black/10 backdrop-blur-md rounded">
+          <button className="px-4 py-2 border rounded flex gap-1 text-white bg-[#032f30]">
+            <User size={20} /> <span>Profile</span>
+          </button>
 
-              <button onClick={handleLogout} className="cursor-pointer">
-                <div className="border px-4 py-2 rounded bg-red-500 flex items-center justify-center gap-1">
-                  <LogOut size={16} className="text-white" /> <span className="text-white">Logout</span>
-                </div>
+          <Dialog open={logoutDialogOpen} onOpenChange={setLogoutDialogOpen}>
+            <DialogTrigger asChild>
+              <button
+                className="border px-4 py-2 rounded bg-red-500 flex items-center gap-2 text-white cursor-pointer"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <LogOut size={18} />
+                <span>Logout</span>
               </button>
+            </DialogTrigger>
+
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Logout</DialogTitle>
+              </DialogHeader>
+              <div className="p-2 space-y-3">
+                <p>Are you sure you want to log out of this account?</p>
+                <div className="flex justify-end gap-2 mt-3">
+                  <button
+                    className="px-3 py-1 border rounded text-sm font-semibold cursor-pointer hover:bg-gray-100 transition duration-200"
+                    onClick={() => setLogoutDialogOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="px-3 py-1 rounded bg-red-600 text-white text-sm font-semibold cursor-pointer hover:bg-red-700 transition duration-200"
+                    onClick={() => {
+                      setLogoutDialogOpen(false);
+                      setProfileModal(false);
+                      handleLogout()
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
               </div>
-            )}
+            </DialogContent>
+          </Dialog>
+        </div>
+      )}
           </div>
           <span className="text-sm font-medium hidden md:block">
             {user.name}

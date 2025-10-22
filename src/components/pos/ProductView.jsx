@@ -9,10 +9,11 @@ import axios from "axios";
 import AddProductDialog from "./products/AddProductDialog";
 import Barcode from "react-barcode";
 import { mockCategories } from "../../data/mockData";
+import EditProduct from "./products/EditProduct";
 export default function ProductView() {
   const products = useSelector((state) => state.products.products);
   const [categories] = useState(mockCategories);
-  const [selectedCategory, setSelectedCategory] = useState();
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const dispatch = useDispatch();
 
@@ -58,8 +59,8 @@ export default function ProductView() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        
-          <button
+
+        <button
           className={`px-4 py-2 text-sm dark:text-gray-300 border rounded border-gray-300 transition-colors duration-200 cursor-pointer
                             ${
                               selectedCategory === ""
@@ -144,7 +145,19 @@ export default function ProductView() {
                     </div>
 
                     <div className="flex gap-2">
-                      <AddStockDialog productId={product.id} />
+                      {/* <AddStockDialog productId={product.id} /> */}
+                      <EditProduct
+                        product={product}
+                        onUpdated={() => {
+                          axios
+                            .get("http://localhost:5000/products")
+                            .then((res) => dispatch(setProduct(res.data)))
+                            .catch((err) =>
+                              console.error("Error reloading products:", err)
+                            );
+                        }}
+                      />
+
                       {/* <button 
                 className="px-2 py-1 border rounded text-xs bg-red-900 text-white"
                 onClick={() => dispatch(removeProduct(product.id))}
