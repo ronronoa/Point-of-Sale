@@ -40,7 +40,7 @@ export default function Sidebar({ collapsed, onCollapsedChange }) {
       <div className="p-4 border-b flex items-center justify-between relative">
         <div className="flex items-center gap-2 overflow-hidden">
           <img
-            src="/POSIMLOGO.png"
+            src="/posimlogo.png"
             alt="POSIM Logo"
             className={`object-cover transition-all duration-300 ${
               collapsed ? "w-8 h-8 mx-auto" : "w-64 h-10"

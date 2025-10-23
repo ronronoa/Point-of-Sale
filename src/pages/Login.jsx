@@ -56,7 +56,7 @@ export default function Login() {
 
           <div className="flex justify-center mb-3 flex-col items-center relative">
             <img 
-            src="/public/POSIMLOGO.png"
+            src="/public/posimlogo.png"
             alt="POSIM Logo" 
             className="w-32 h-auto md:w-40 object-contain"
             />

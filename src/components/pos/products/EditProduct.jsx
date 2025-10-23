@@ -98,7 +98,7 @@ export default function EditProduct({ product, onUpdated }) {
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="px-1 md:px-2 py-0.5 md:py-1 border rounded text-[10px] md:text-xs bg-green-700 hover:bg-green-800 text-white cursor-pointer"
+          className="px-1 md:px-2 py-0.5 md:py-1 border rounded text-[10px] md:text-xs bg-green-700 hover:bg-green-800 text-white hover:text-white cursor-pointer"
         >
           <SquarePen size={18} />
           Edit Product

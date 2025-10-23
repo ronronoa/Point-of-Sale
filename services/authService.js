@@ -33,14 +33,27 @@ const authService = {
         return localStorage.getItem('userName')
     },
 
+    getUserData() {
+        const userData = localStorage.getItem('userData')
+        return userData ? JSON.parse(userData) : null
+    },
+
+    setUserData(userData) {
+        localStorage.setItem('userData', JSON.stringify(userData))
+    },
+
     isAuthenticated() {
         return !!this.getToken();
     },
 
-    setAuthData(token, role, name) {
+    setAuthData(token, role, name, userData = null) {
     localStorage.setItem('token', token);
     localStorage.setItem('userRole', role);
     localStorage.setItem('userName', name);
+
+        if(userData) {
+            localStorage.setItem('userData', JSON.stringify(userData))
+        }
   }
 }
 
