@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { Menu, User, LogOut } from "lucide-react";
+import { Menu, User, LogOut, Pencil } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { useAuth } from "../../contexts/AuthContext";
 import { NavLink, useLocation, useNavigate } from "react-router";
@@ -58,6 +58,7 @@ export default function Header({ onToggleSidebar }) {
     last_name: user?.last_name || "",
     address: user?.address || "",
     username: user?.username || "",
+    password: user?.password,
   });
   
   useEffect(() => {
@@ -66,6 +67,7 @@ export default function Header({ onToggleSidebar }) {
       last_name: user?.last_name || "",
       address: user?.address || "",
       username: user?.username || "",
+      password: user?.password
     })
   }, [user])
 
@@ -89,14 +91,14 @@ export default function Header({ onToggleSidebar }) {
         return;
       }
 
-      const payload = { username: profileData.username };
+      const payload = { username: profileData.username, password: profileData.password };
 
       const res = await axios.put(
         `http://localhost:5000/api/users/update-username/${userId}`,
         payload
       );
 
-      updateUserData({ username: profileData.username });
+      updateUserData({ username: profileData.username, password: profileData.password });
       toast.success("Profile updated successfully!");
       setProfileDialogOpen(false);
       setProfileModal(false);
@@ -185,7 +187,7 @@ export default function Header({ onToggleSidebar }) {
               className="w-8 h-8 rounded-full border flex items-center justify-center bg-[#171717] cursor-pointer"
               onClick={() => setProfileModal(!profileModal)}
             >
-              <User size={18} className="text-white" />
+              <img src="/user-placeholder.png" alt="" className=""/>
             </div>
 
             {profileModal && (
@@ -231,13 +233,31 @@ export default function Header({ onToggleSidebar }) {
       <Dialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit Profile</DialogTitle>
+            <DialogTitle>Edit Profile: <span className="text-green-500 font-semibold">{user.name}</span></DialogTitle>
           </DialogHeader>
 
           <form
             onSubmit={handleProfileUpdate}
             className="space-y-3 mt-2"
           >
+            <div className="flex justify-center flex-col items-center">
+            <label className="relative group cursor-pointer">
+              <img
+                alt="Profile"
+                className="w-24 h-24 rounded-full object-cover border-2 border-gray-300 transition-all hover:opacity-80"
+              />
+              <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                <Pencil className="text-white" size={16} />
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                className="absolute inset-0 opacity-0 cursor-pointer"
+              />
+            </label>
+            <p className="text-gray-500 text-xs font-medium">Click the image to change.</p>
+          </div>
+
             <div className="space-y-2">
               <Label>Username</Label>
               <Input
@@ -247,6 +267,17 @@ export default function Header({ onToggleSidebar }) {
                 required
                 placeholder="Enter new username"
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label> Change Password <span className="text-gray-500 text-xs">(Optional)</span> </Label>
+              <Input
+              name="password"
+              value={profileData.password}
+              onChange={handleInputChange}
+              placeholder="Enter new password"
+              >
+              </Input>
             </div>
 
             <div className="flex justify-end gap-2 pt-2">

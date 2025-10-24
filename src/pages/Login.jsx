@@ -1,5 +1,5 @@
-import { Eye, EyeOff, Store } from "lucide-react";
-import React, { useState } from "react";
+import { ChevronLeft, Eye, EyeOff, Store } from "lucide-react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 import ThemeToggle from "../components/Layout/ThemeToggle";
 
@@ -21,6 +21,12 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setInitialLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,11 +49,33 @@ export default function Login() {
       setLoading(false);
     }
   };
+  if (initialLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center">
+          <img
+            src="/public/posimlogo.png"
+            alt="POSIM Logo"
+            className="w-40 h-auto object-contain mb-6"
+          />
+          <div className="h-12 w-12 rounded-full border-4 border-t-transparent border-gray-300 animate-spin" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className="flex items-center justify-center min-h-screen relative">
+      <div className="flex items-center justify-center min-h-screen">
+        <nav className="absolute top-0 left-0 p-4">
+          <NavLink 
+          to="/"
+          className="px-4 py-2 border rounded-full flex bg-[#032F30] text-white cursor-pointer">
+            <ChevronLeft /> Back to Landing Page
+          </NavLink>
+        </nav>
         <nav className="absolute top-0 right-0 p-4">
-          <ThemeToggle />
+            <ThemeToggle />
         </nav>
         <div className="w-full max-w-md space-y-8 p-6 text-center">
           {/* <div className="mx-auto h-12 w-12 rounded-lg bg-primary flex items-center justify-center mb-4">

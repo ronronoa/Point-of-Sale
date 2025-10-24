@@ -98,7 +98,7 @@ export default function Dashboard() {
   useEffect(() => {
     fetchStats();
     fetchChartData();
-  }, []);
+  }, [startDate, endDate]);
 
   const handleFilter = (e) => {
     e.preventDefault();
@@ -136,7 +136,7 @@ export default function Dashboard() {
             onChange={(e) => setEndDate(e.target.value)}
             className="border rounded-md p-2 text-sm cursor-pointer"
           />
-          <button
+          {/* <button
             className="bg-[#085b5f] text-white px-3 py-2 rounded-md text-xs hover:bg-[#0c969c] transition cursor-pointer flex items-center justify-center min-w-[32px] min-h-[32px]"
             onClick={handleFilter}
             disabled={loading}
@@ -146,7 +146,7 @@ export default function Dashboard() {
             ) : (
               <SlidersHorizontal size={14} />
             )}
-          </button>
+          </button> */}
         </div>
       </div>
       <StatCard>
@@ -177,7 +177,12 @@ export default function Dashboard() {
       </StatCard>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 md:gap-3 space-y-4">
         <div className="px-4 lg:col-span-4">
-          <SalesOverviewChart />
+          <SalesOverviewChart 
+          // startDate={startDate}
+          // setStartDate={setStartDate}
+          // endDate={endDate}
+          // setEndDate={setEndDate}
+          />
         </div>
 
         <div className="px-4 lg:col-span-2">

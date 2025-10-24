@@ -15,6 +15,9 @@ import { useDispatch } from "react-redux"
 import { useEffect } from "react"
 import { fetchProducts } from "./store/productSlice"
 import AddUser from "./pages/User/AddUser"
+import LandingPage from "./pages/Landing/LandingPage"
+import About from "./pages/Landing/About"
+import Home from "./pages/Landing/Home"
 
 function App() {
   const dispatch = useDispatch()
@@ -26,7 +29,8 @@ function App() {
       <AuthProvider>
         <Router>
             <Routes>
-              <Route path="/" element={<Navigate to="/login" replace />} />
+              {/* <Route path="/login" element={<Navigate to="/login" />} /> */}
+              <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={
                 <ProtectedRoute role="admin">

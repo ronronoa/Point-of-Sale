@@ -116,8 +116,8 @@ export default function ProductGrid() {
         {filteredProducts.map((product) => (
             <Card 
             key={product.id} 
-            className="overflow-hidden hover:scale-105 transition duration-200 cursor-pointer"
-            // onClick={() => handleAddtoCart(product, toast.remove())}
+            className={`overflow-hidden hover:scale-105 transition duration-200 cursor-pointer ${product.stock <= 0 ? "bg-black/30" : ""}`}
+            onClick={() => handleAddtoCart(product, toast.remove())}
             >
               <div className="flex items-center justify-center border-b border-gray-500">
                 <img
@@ -156,6 +156,7 @@ export default function ProductGrid() {
                       <Plus size={14} />
                     </button>
                   </div>
+                  <p className="text-sm text-red-500 font-semibold">{product.stock <= 0 ? "Out of stock." : ""}</p>
                 </div>
               </CardContent>
             </Card>

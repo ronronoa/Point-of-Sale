@@ -2,6 +2,7 @@ import axios from "axios";
 import { Edit, Trash2 } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 import EditUsers from "../../components/pos/users/EditUsers";
+import RemoveUser from "./RemoveUser";
 
 export default function UserTable() {
   const [users, setUsers] = useState([]);
@@ -59,9 +60,7 @@ export default function UserTable() {
               <td className="px-3 md:px-6 py-2 text-xs dark:text-gray-100 hidden md:table-cell">
                 <div className="flex items-center justify-center gap-2">
                   <EditUsers user={user} onUpdated={fetchUsers} />
-                  <button className="text-red-500 hover:scale-105 transition duration-200 cursor-pointer">
-                    <Trash2 size={20} />
-                  </button>
+                  <RemoveUser userId={user.user_id} onUserRemoved={fetchUsers}/>
                 </div>
               </td>
             </tr>

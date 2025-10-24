@@ -1,4 +1,3 @@
-// src/components/pos/users/EditUsers.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -12,16 +11,18 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
+import { Edit, Pencil } from "lucide-react";
 
 export default function EditUsers({ user, onUpdated }) {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
     address: "",
+    imageFile: null,
+    imagePreview: "/user-placeholder.png",
   });
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user && open) {
@@ -29,13 +30,12 @@ export default function EditUsers({ user, onUpdated }) {
         first_name: user.first_name || "",
         last_name: user.last_name || "",
         address: user.address || "",
-      });
-    }
-    if (user && !open) {
-      setFormData({
-        first_name: user.first_name || "",
-        last_name: user.last_name || "",
-        address: user.address || "",
+        imageFile: null,
+        imagePreview: user.profile_image
+          ? user.profile_image.startsWith("http")
+            ? user.profile_image
+            : `http://localhost:5000${user.profile_image}`
+          : "/user-placeholder.png",
       });
     }
   }, [user, open]);
@@ -43,6 +43,21 @@ export default function EditUsers({ user, onUpdated }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setFormData((prev) => ({
+          ...prev,
+          imageFile: file,
+          imagePreview: reader.result,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -53,23 +68,31 @@ export default function EditUsers({ user, onUpdated }) {
     try {
       const userId = user.user_id || user.id;
       if (!userId) {
-        toast.error("No user selected or missing user ID.");
+        toast.error("Missing user ID.");
         return;
+      }
+
+      const formDataToSend = new FormData();
+      formDataToSend.append("first_name", formData.first_name);
+      formDataToSend.append("last_name", formData.last_name);
+      formDataToSend.append("address", formData.address);
+      if (formData.imageFile) {
+        formDataToSend.append("image", formData.imageFile);
       }
 
       const res = await axios.put(
         `http://localhost:5000/api/users/update/${userId}`,
-        formData
+        formDataToSend,
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
 
-      toast.success(res.data.message || "User updated successfully.");
+      toast.success(res.data.message || "User updated successfully");
       if (onUpdated) await onUpdated();
       setOpen(false);
     } catch (error) {
       console.error("Update error:", error);
       toast.error(
-        error.response?.data?.message ||
-          "Something went wrong while updating the user."
+        error.response?.data?.message || "Something went wrong while updating."
       );
     } finally {
       setLoading(false);
@@ -93,6 +116,26 @@ export default function EditUsers({ user, onUpdated }) {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-3">
+          <div className="flex justify-center flex-col items-center">
+            <label className="relative group cursor-pointer">
+              <img
+                src={formData.imagePreview}
+                alt="Profile"
+                className="w-24 h-24 rounded-full object-cover border-2 border-gray-300 transition-all hover:opacity-80"
+              />
+              <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                <Pencil className="text-white" size={16} />
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="absolute inset-0 opacity-0 cursor-pointer"
+              />
+            </label>
+            <p className="text-gray-500 text-xs font-medium">Click the image to change.</p>
+          </div>
+
           <div className="space-y-2">
             <Label>First Name</Label>
             <Input
