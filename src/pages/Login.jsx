@@ -12,6 +12,8 @@ import { Input } from "@/components/ui/input";
 import { NavLink, useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 import ThemeToggle from "../components/Layout/ThemeToggle";
+import { motion } from "motion/react";
+import { useTheme } from "../contexts/ThemeProvider";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -22,6 +24,7 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [initialLoading, setInitialLoading] = useState(true);
+  const { theme } = useTheme()
 
   useEffect(() => {
     const t = setTimeout(() => setInitialLoading(false), 700);
@@ -70,21 +73,28 @@ export default function Login() {
         <nav className="absolute top-0 left-0 p-4">
           <NavLink 
           to="/"
-          className="px-4 py-2 border rounded-full flex bg-[#032F30] text-white cursor-pointer">
-            <ChevronLeft /> Back to Landing Page
+          className="px-4 py-2 border rounded-full flex bg-[#032F30] text-white cursor-pointer group">
+            <span className="opacity-0 group-hover:opacity-100 transition duration-200">
+              <ChevronLeft />  
+            </span>
+            <span className="">Back to Landing Page</span>
           </NavLink>
         </nav>
         <nav className="absolute top-0 right-0 p-4">
             <ThemeToggle />
         </nav>
-        <div className="w-full max-w-md space-y-8 p-6 text-center">
+        <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="w-full max-w-md space-y-8 p-6 text-center">
           {/* <div className="mx-auto h-12 w-12 rounded-lg bg-primary flex items-center justify-center mb-4">
             <Store className="h-6 w-6 text-primary-foreground" />
           </div> */}
 
           <div className="flex justify-center mb-3 flex-col items-center relative">
             <img 
-            src="/public/posimlogo.png"
+            src={theme === 'dark' ? '/posimlogo_dark.png' : '/posimlogo.png'}
             alt="POSIM Logo" 
             className="w-32 h-auto md:w-40 object-contain"
             />
@@ -150,7 +160,7 @@ export default function Login() {
               </form>
             </CardContent>
           </Card>
-        </div>
+        </motion.div>
       </div>
     </>
   );

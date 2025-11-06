@@ -1,12 +1,20 @@
 import { NavLink } from "react-router";
 import About from "./About";
 import Navigation from "./components/Navigation";
+import { motion } from "motion/react";
+import { useTheme } from "../../contexts/ThemeProvider";
 
 export default function Home() {
+  const { theme } = useTheme()
   return (
     <>
       <Navigation />
-      <div className="min-h-screen scroll-smooth">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="min-h-screen scroll-smooth"
+      >
         <section
           className="h-screen flex items-center justify-center text-center"
           id="home"
@@ -14,7 +22,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-center justify-center flex-col space-y-10 order-2 md:order-1">
               <img
-                src="/posimlogo.png"
+                src={theme === 'dark' ? '/posimlogo_dark.png' : '/posimlogo.png'}
                 alt=""
                 className="w-72 h-10 object-cover"
               />
@@ -24,22 +32,22 @@ export default function Home() {
                 operations — all in one intuitive dashboard.
               </p>
 
-                <div className="w-full flex justify-center">
-                    <NavLink
-                    to="/login"
-                    className="bg-gradient-to-r from-[#032f30] to-[#036c6e] text-white px-6 py-3 rounded-xl hover:bg-gradient-to-l hover:from-[#032f30] hover:to-[#036c6e] transition-all duration-300 cursor-pointer"
-                    >
-                    Get Started
-                    </NavLink>
-                </div>
+              <div className="w-full flex justify-center">
+                <NavLink
+                  to="/login"
+                  className="bg-gradient-to-r from-[#032f30] to-[#036c6e] text-white px-6 py-3 rounded-xl hover:bg-gradient-to-l hover:from-[#032f30] hover:to-[#036c6e] transition-all duration-300 cursor-pointer"
+                >
+                  Get Started
+                </NavLink>
+              </div>
             </div>
 
             <div className="flex items-center order-1 md:order-2 mb-4 md:mb-0">
-                <img src="/posim_mock.png" alt="" className="w-xl mx-auto"/>
+              <img src="/posim_mock.png" alt="" className="w-xl mx-auto" />
             </div>
           </div>
         </section>
-      </div>
+      </motion.div>
       <About />
     </>
   );

@@ -10,12 +10,14 @@ import AddProductDialog from "./products/AddProductDialog";
 import Barcode from "react-barcode";
 import { mockCategories } from "../../data/mockData";
 import EditProduct from "./products/EditProduct";
+import { selectTaxRate } from "../../store/selectors";
 export default function ProductView() {
   const products = useSelector((state) => state.products.products);
   const [categories] = useState(mockCategories);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const dispatch = useDispatch();
+  const taxRate = useSelector(selectTaxRate)
 
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
@@ -24,6 +26,10 @@ export default function ProductView() {
     const matchesSearch = product.name.toLowerCase().includes(term);
     return matchesCategory && matchesSearch;
   });
+
+  const calculatePriceWithTax = (basePrice) => {
+    return basePrice * (1 + taxRate);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -90,8 +96,10 @@ export default function ProductView() {
 
       {filteredProducts.length > 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {filteredProducts.map((product) => (
-            <Card key={product.id}>
+          {filteredProducts.map((product) => {
+            const priceWithTax = calculatePriceWithTax(product.price)
+            return (
+              <Card key={product.id}>
               <div className="flex items-center justify-center border-b border-gray-500">
                 <img
                   src={`http://localhost:5000${product.image}`}
@@ -112,24 +120,10 @@ export default function ProductView() {
                         {product.category}
                       </div>
                     </div>
-
-                    <div className="flex">
-                      {product.barcode && (
-                        <div className="flex justify-center">
-                          <Barcode
-                            value={product.barcode}
-                            width={1}
-                            height={15}
-                            displayValue={true}
-                            fontSize={12}
-                          />
-                        </div>
-                      )}
-                    </div>
                   </div>
                   <div className="flex items-center">
                     <PhilippinePeso size={18} />
-                    <p className="text-lg font-bold">{product.price}</p>
+                    <p className="text-lg font-bold">{priceWithTax.toFixed(2)}</p>
                   </div>
 
                   <div className="flex flex-col md:flex-row items-center justify-between">
@@ -173,7 +167,8 @@ export default function ProductView() {
                 </div>
               </CardContent>
             </Card>
-          ))}
+            )
+        })}
         </div>
       ) : (
         <h2 className="text-gray-600 text-center">No Product Found</h2>

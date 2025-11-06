@@ -2,13 +2,28 @@ import React, { useRef } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Printer } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
+import { useSelector } from "react-redux";
+import { selectTaxRate } from "../../store/selectors";
 
-export default function ReceiptView({ receipt, open, onClose , amountEntered = 0}) {
+export default function ReceiptView({ receipt, open, onClose, amountEntered = 0 }) {
   const receiptRef = useRef(null);
+  const { user } = useAuth();
+  const taxRate = useSelector(selectTaxRate);
+
+  const subtotal = parseFloat(receipt.subtotal) || 0;
+  const tax = parseFloat(receipt.tax) || 0;
+  const discount = parseFloat(receipt.discount) || 0;
+  const total = parseFloat(receipt.total) || 0;
+  const amountPaid = parseFloat(amountEntered) || 0;
+
+  const calculatePriceWithTax = (basePrice) => {
+    return basePrice * (1 + taxRate);
+  };
 
   const change = receipt.paymentType === "cash"
-  ? Math.max(amountEntered - receipt.total, 0)
-  : 0;
+    ? Math.max(amountPaid - total, 0)
+    : 0;
 
   const handleManualPrint = () => {
     const printContent = receiptRef.current.innerHTML;
@@ -101,11 +116,15 @@ export default function ReceiptView({ receipt, open, onClose , amountEntered = 0
             </div>
             <div className="flex justify-between">
               <span>Date:</span>
-              <span>{receipt.date.toLocaleDateString()}</span>
+              <span>{new Date(receipt.date).toLocaleDateString()}</span>
             </div>
             <div className="flex justify-between">
               <span>Time:</span>
-              <span>{receipt.date.toLocaleTimeString()}</span>
+              <span>{new Date(receipt.date).toLocaleTimeString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Order Handled By:</span>
+              <span>{user?.name || 'Cashier'}</span>
             </div>
           </div>
 
@@ -126,9 +145,9 @@ export default function ReceiptView({ receipt, open, onClose , amountEntered = 0
                 </div>
                 <div className="flex justify-between text-muted-foreground">
                   <span>
-                    {item.qty} x {item.price}
+                    {item.qty} x {(parseFloat(item.price) || 0).toFixed(2)}
                   </span>
-                  <span>{(item.qty * item.price).toFixed(2)}</span>
+                  <span>{(item.qty * (parseFloat(item.price) || 0)).toFixed(2)}</span>
                 </div>
               </div>
             ))}
@@ -138,22 +157,22 @@ export default function ReceiptView({ receipt, open, onClose , amountEntered = 0
 
           <div className="space-y-1">
             <div className="flex justify-between">
-              <span>Subtotal:</span>
-              <span>{receipt.subtotal.toFixed(2)}</span>
+              <span>Vatable Sales:</span>
+              <span>{subtotal.toFixed(2)}</span>
             </div>
 
             <div className="flex justify-between">
               <span>Discount:</span>
-              <span>{receipt.discount.toFixed(0)} %</span>
+              <span>{discount.toFixed(2)}</span>
             </div>
 
             <div className="flex justify-between">
-              <span>Tax:</span>
-              <span>{receipt.tax.toFixed(2)}</span>
+              <span>VAT amount:</span>
+              <span>{tax.toFixed(2)}</span>
             </div>
             <div className="flex justify-between font-bold text-lg border-top">
               <span>Total:</span>
-              <span>{receipt.total.toFixed(2)}</span>
+              <span>{total.toFixed(2)}</span>
             </div>
           </div>
 
@@ -168,7 +187,7 @@ export default function ReceiptView({ receipt, open, onClose , amountEntered = 0
               <>
                 <div className="flex justify-between">
                   <span>Amount Paid:</span>
-                  <span>{amountEntered}</span>
+                  <span>{amountPaid.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Change:</span>

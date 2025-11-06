@@ -83,6 +83,15 @@ export function AuthProvider({ children }) {
         authService.setAuthData(token, role, name, updatedUser);
     }
 
+    const forgotPassword = async (identifier) => {
+        try {
+            const response = await authService.forgotPassword(identifier);
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     const toggleRole = () => {
         if(user) {
             const newRole = user.role === 'admin' ? 'cashier' : 'admin';
@@ -111,6 +120,7 @@ export function AuthProvider({ children }) {
             isCashier,
             isAuthenticated,
             login,
+            forgotPassword,
             logout,
             toggleRole,
             updateUserData

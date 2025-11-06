@@ -18,6 +18,7 @@ import AddUser from "./pages/User/AddUser"
 import LandingPage from "./pages/Landing/LandingPage"
 import About from "./pages/Landing/About"
 import Home from "./pages/Landing/Home"
+import ArchivedUser from "./pages/User/ArchivedUser"
 
 function App() {
   const dispatch = useDispatch()
@@ -32,6 +33,13 @@ function App() {
               {/* <Route path="/login" element={<Navigate to="/login" />} /> */}
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/archived" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <ArchivedUser />
+                  </Layout>
+                </ProtectedRoute>
+              }/>
               <Route path="/dashboard" element={
                 <ProtectedRoute role="admin">
                 <Layout>

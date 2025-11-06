@@ -116,7 +116,7 @@ export default function EditUsers({ user, onUpdated }) {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-3">
-          <div className="flex justify-center flex-col items-center">
+          {/* <div className="flex justify-center flex-col items-center">
             <label className="relative group cursor-pointer">
               <img
                 src={formData.imagePreview}
@@ -134,7 +134,7 @@ export default function EditUsers({ user, onUpdated }) {
               />
             </label>
             <p className="text-gray-500 text-xs font-medium">Click the image to change.</p>
-          </div>
+          </div> */}
 
           <div className="space-y-2">
             <Label>First Name</Label>

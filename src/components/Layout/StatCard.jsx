@@ -24,7 +24,7 @@ export default function StatCard({ children }) {
 
 export function StatCardItem({ text, icon, value, chartData, color = "#8884d8" }) {
   return (
-    <div className="font-bold border dark:border-[#1f1f1f] dark:bg-[#1e1e1e] bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+    <div className="font-bold border dark:border-[#1f1f1f] dark:bg-[#1e1e1e] bg-white p-4 rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition duration-300">
       {/* Title & Icon */}
       <div className="flex items-center justify-between mb-2">
         <span className="flex items-center text-sm font-medium dark:text-gray-300">

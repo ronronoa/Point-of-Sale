@@ -10,6 +10,7 @@ import {
 import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { NavLink, useLocation } from "react-router";
+import { useTheme } from "../../contexts/ThemeProvider";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard, roles: ["admin"] },
@@ -26,7 +27,7 @@ const navigation = [
 export default function Sidebar({ collapsed, onCollapsedChange }) {
   const { user } = useAuth();
   const location = useLocation()
-
+  const { theme } = useTheme()
   const filteredNavigation = navigation.filter((item) =>
     item.roles.includes(user.role)
   );
@@ -40,16 +41,13 @@ export default function Sidebar({ collapsed, onCollapsedChange }) {
       <div className="p-4 border-b flex items-center justify-between relative">
         <div className="flex items-center gap-2 overflow-hidden">
           <img
-            src="/posimlogo.png"
+            src={theme === 'dark' ? '/posimlogo_dark.png' : "/posimlogo.png"}
             alt="POSIM Logo"
             className={`object-cover transition-all duration-300 ${
               collapsed ? "w-8 h-8 mx-auto" : "w-64 h-10"
             }`}
           />
         </div>
-        {/* {!collapsed && <h1 className="text-lg font-semibold">ROPOS</h1>} */}
-
-        {/* {!collapsed && <img src="/public/POSIMLOGO.png" alt="Logo" className=""/>} */}
 
         <button
           className="p-2 hover:bg-gray-100 dark:hover:bg-[#1e1e1e] transiton duration-200 rounded cursor-pointer"

@@ -131,6 +131,29 @@ export default function EditProduct({ product, onUpdated }) {
                   </div>
 
                   <div className="space-y-2">
+                    <Label>Price</Label>
+                    <Input
+                      name="price"
+                      type="number"
+                      step="0.01"
+                      value={formData.price}
+                      onChange={handleChange}
+                      className="text-xs"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Stock</Label>
+                    <Input
+                      name="stock"
+                      type="number"
+                      value={formData.stock}
+                      onChange={handleChange}
+                      className="text-xs"
+                    />
+                  </div>
+
+                  {/* <div className="space-y-2">
                     <Label>Barcode</Label>
                     <Input
                       name="barcode"
@@ -154,7 +177,7 @@ export default function EditProduct({ product, onUpdated }) {
                         </div>
                       </div>
                     )}
-                  </div>
+                  </div> */}
 
                   <div className="space-y-2">
                     <Label>Category</Label>
@@ -181,7 +204,7 @@ export default function EditProduct({ product, onUpdated }) {
                             {category.name}
                           </SelectItem>
                         ))}
-                        <SelectItem value="other">Other</SelectItem>
+                        {/* <SelectItem value="other">Other</SelectItem> */}
                       </SelectContent>
                     </Select>
 
@@ -205,28 +228,6 @@ export default function EditProduct({ product, onUpdated }) {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label>Price</Label>
-                    <Input
-                      name="price"
-                      type="number"
-                      step="0.01"
-                      value={formData.price}
-                      onChange={handleChange}
-                      className="text-xs"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Stock</Label>
-                    <Input
-                      name="stock"
-                      type="number"
-                      value={formData.stock}
-                      onChange={handleChange}
-                      className="text-xs"
-                    />
-                  </div>
 
                   <div className="space-y-2">
                     <Label>Product Image</Label>

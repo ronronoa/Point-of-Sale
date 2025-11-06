@@ -240,23 +240,6 @@ export default function Header({ onToggleSidebar }) {
             onSubmit={handleProfileUpdate}
             className="space-y-3 mt-2"
           >
-            <div className="flex justify-center flex-col items-center">
-            <label className="relative group cursor-pointer">
-              <img
-                alt="Profile"
-                className="w-24 h-24 rounded-full object-cover border-2 border-gray-300 transition-all hover:opacity-80"
-              />
-              <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                <Pencil className="text-white" size={16} />
-              </div>
-              <input
-                type="file"
-                accept="image/*"
-                className="absolute inset-0 opacity-0 cursor-pointer"
-              />
-            </label>
-            <p className="text-gray-500 text-xs font-medium">Click the image to change.</p>
-          </div>
 
             <div className="space-y-2">
               <Label>Username</Label>

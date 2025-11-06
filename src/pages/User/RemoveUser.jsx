@@ -18,7 +18,7 @@ export default function RemoveUser({ userId, onUserRemoved }) {
     toast.remove()
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:5000/api/users/remove/${userId}`);
+      await axios.put(`http://localhost:5000/api/users/archived/${userId}`);
       toast.success("User Removed Successfully.")
       setLoading(false);
       setOpen(false);

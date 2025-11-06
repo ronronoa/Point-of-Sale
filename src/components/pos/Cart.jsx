@@ -22,7 +22,7 @@ export default function Cart() {
         <Card classname="h-full flex flex-col">
           <CardHeader classname="pb-4">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">Cart</CardTitle>
+              <CardTitle className="text-lg">Orders</CardTitle>
               <Badge>{itemCount} items </Badge>
             </div>
           </CardHeader>

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
 
 const initialState = {
   items: [],
@@ -15,19 +16,27 @@ const cartSlice = createSlice({
       const { product, qty = 1 } = action.payload;
       const existingItem = state.items.find((item) => item.id === product.id);
 
+      const priceWithTax = product.price * (1 + state.taxRate)
+
       if (existingItem) {
         existingItem.qty += qty;
-        existingItem.subtotal = existingItem.qty * existingItem.price;
+        existingItem.subtotal = existingItem.qty * priceWithTax;
       } else {
         state.items.push({
           id: product.id,
           name: product.name,
           image: product.image,
-          price: product.price,
+          price: priceWithTax,
+          basePrice: product.price,
+          taxRate: state.taxRate,
           qty,
-          subtotal: product.price * qty,
+          subtotal: qty * priceWithTax,
         });
       }
+    },
+
+    updateTaxRate: (state, action) => {
+      state.taxRate = action.payload;
     },
 
     updateQty: (state, action) => {
@@ -64,11 +73,11 @@ const cartSlice = createSlice({
       if (type === "PWD" || type === "SENIOR") {
         state.discountType = type;
         state.discount = 20; // percent
-        state.taxRate = 0; // VAT exempt
+        // state.taxRate = 0; // VAT exempt
       } else {
         state.discountType = null;
         state.discount = 0;
-        state.taxRate = 0.12;
+        // state.taxRate = 0.12;
       }
     },
   },

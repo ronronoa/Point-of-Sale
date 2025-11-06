@@ -3,17 +3,19 @@ import { HomeIcon } from "lucide-react";
 import { NavLink } from "react-router";
 import { Users, Phone } from "lucide-react";
 import ThemeToggle from "../../../components/Layout/ThemeToggle";
+import { useTheme } from "../../../contexts/ThemeProvider";
 
 export default function Navigation() {
   const navigation = [
     { name: "Home", link: "#home", icon: <HomeIcon size={20} /> },
     { name: "About Us", link: "#about", icon: <Users size={20} /> },
   ];
+  const { theme } = useTheme()
   return (
     <div>
       <div className="flex items-center justify-between border fixed top-0 w-full border-b-gray-300 p-4 z-10 backdrop-blur-md">
         <div className="flex">
-          <img src="/posimlogo.png" alt="" className="w-40 object-cover h-10" />
+          <img src={theme === 'dark' ? '/posimlogo_dark.png' : '/posimlogo.png'} alt="" className="w-40 object-cover h-10" />
         </div>
         <header className="flex gap-2">
           {navigation.map((nav) => (

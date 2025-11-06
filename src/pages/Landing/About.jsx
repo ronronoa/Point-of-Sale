@@ -1,6 +1,7 @@
 import React from 'react'
 import { Package, CreditCard, BarChart3, Shield, Zap, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { motion } from 'motion/react';
 
 const features = [
   {
@@ -37,7 +38,8 @@ const features = [
 
 export default function About() {
   return (
-    <section className="relative py-20 sm:py-32 bg-gradient-subtle overflow-hidden" id='about'>
+    <motion.section
+    className="relative py-20 sm:py-32 bg-gradient-subtle overflow-hidden" id='about'>
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
 
@@ -107,6 +109,6 @@ export default function About() {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   )
 }

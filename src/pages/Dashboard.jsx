@@ -3,6 +3,7 @@ import axios from "axios";
 import SalesOverviewChart from "../components/charts/SalesOverviewChart";
 import ProductOverviewChart from "../components/charts/ProductOverviewChart";
 import StatCard, { StatCardItem } from "../components/Layout/StatCard";
+import Flatpickr from 'react-flatpickr';
 import {
   Box,
   DollarSign,
@@ -125,7 +126,9 @@ export default function Dashboard() {
             min={MIN_DATE}
             max={MAX_DATE}
             onChange={(e) => setStartDate(e.target.value)}
-            className="border rounded-md p-2 text-sm cursor-pointer"
+            className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm 
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                      bg-white text-gray-700"
           />
           <span>to</span>
           <input
@@ -134,7 +137,9 @@ export default function Dashboard() {
             max={MAX_DATE}
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="border rounded-md p-2 text-sm cursor-pointer"
+            className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm 
+            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+            bg-white text-gray-700"
           />
           {/* <button
             className="bg-[#085b5f] text-white px-3 py-2 rounded-md text-xs hover:bg-[#0c969c] transition cursor-pointer flex items-center justify-center min-w-[32px] min-h-[32px]"

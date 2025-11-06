@@ -16,8 +16,10 @@ import {
   Bar,
 } from "recharts";
 
-export default function SalesOverviewChart({ startDate, setStartDate, endDate, setEndDate}) {
+export default function SalesOverviewChart() {
   const [salesData, setSalesData] = useState([]);
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState("")
 
   const today = new Date().toISOString().split("T")[0];
   const minDate = "2025-01-01";
