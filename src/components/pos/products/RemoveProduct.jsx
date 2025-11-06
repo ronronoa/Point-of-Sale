@@ -43,7 +43,7 @@ export default function RemoveProduct({productId, productName}) {
       <DialogTrigger asChild>
         <button
           variant="outline"
-          className="px-1 md:px-2 py-0.5 md:py-1 border rounded text-xs bg-red-700 text-white cursor-pointer hover:bg-red-500 hover:text-black transition duration-200"
+          className="px-1 md:px-2 py-0.5 md:py-1 border rounded text-xs bg-red-700 text-white cursor-pointer hover:bg-red-800 transition duration-200"
         >
           - Remove
         </button>
@@ -57,11 +57,11 @@ export default function RemoveProduct({productId, productName}) {
             </p>
         <DialogFooter className="flex justify-end gap-2 mt-4">
             <DialogTrigger asChild>
-                <Button variant="outline">
+                <Button variant="outline" className="cursor-pointer">
                     Cancel
                 </Button>
             </DialogTrigger>
-            <Button onClick={handleRemove} className="bg-red-700 text-white">
+            <Button onClick={handleRemove} className="bg-red-700 text-white hover:bg-red-800 cursor-pointer">
                 Confirm Remove
             </Button>
         </DialogFooter>

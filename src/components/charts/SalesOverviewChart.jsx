@@ -58,7 +58,9 @@ export default function SalesOverviewChart() {
             onChange={(e) => setStartDate(e.target.value)}
             min={minDate}
             max={today}
-            className="border rounded-md px-3 py-1 text-sm"
+            className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm 
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                      bg-white text-gray-700"
           />
           <input
             type="date"
@@ -66,7 +68,9 @@ export default function SalesOverviewChart() {
             onChange={(e) => setEndDate(e.target.value)}
             min={minDate}
             max={today}
-            className="border rounded-md px-3 py-1 text-sm"
+            className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm 
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                      bg-white text-gray-700"
           />
         </div>
       </CardHeader>

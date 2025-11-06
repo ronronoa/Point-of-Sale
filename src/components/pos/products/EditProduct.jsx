@@ -264,7 +264,7 @@ export default function EditProduct({ product, onUpdated }) {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="bg-green-700 hover:bg-green-800 text-white px-3 py-1 rounded text-sm"
+                  className="bg-green-700 hover:bg-green-800 text-white px-3 py-1 rounded text-sm cursor-pointer"
                 >
                   {loading ? "Updating..." : "Update Product"}
                 </Button>

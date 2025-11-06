@@ -1,10 +1,11 @@
-import React, { useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Printer } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useSelector } from "react-redux";
 import { selectTaxRate } from "../../store/selectors";
+
 
 export default function ReceiptView({ receipt, open, onClose, amountEntered = 0 }) {
   const receiptRef = useRef(null);
@@ -96,6 +97,7 @@ export default function ReceiptView({ receipt, open, onClose, amountEntered = 0 
     newWindow.document.close();
   };
 
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-sm">
@@ -122,9 +124,10 @@ export default function ReceiptView({ receipt, open, onClose, amountEntered = 0 
               <span>Time:</span>
               <span>{new Date(receipt.date).toLocaleTimeString()}</span>
             </div>
-            <div className="flex justify-between">
+            
+              <div className="flex justify-between">
               <span>Order Handled By:</span>
-              <span>{user?.name || 'Cashier'}</span>
+              <span>{user?.name || "cashier"}</span>
             </div>
           </div>
 
